@@ -37,8 +37,10 @@ echo ""
 
 # Update app.py with corrected routes
 echo -e "${BLUE}Updating backend/app.py with corrected routes...${NC}"
-if [ -f "corrected-app-py.py" ]; then
-    cp corrected-app-py.py backend/app.py
+if [ -f "updates/corrected-app-py.py" ]; then
+        cp updates/corrected-app-py.py backend/app.py
+#if [ -f "corrected-app-py.py" ]; then
+#    cp corrected-app-py.py backend/app.py
     echo -e "${GREEN}✓ Updated app.py${NC}"
 else
     echo -e "${RED}Error: corrected-app-py.py not found${NC}"
@@ -50,16 +52,16 @@ fi
 echo -e "${BLUE}Setting up feature directory templates...${NC}"
 
 # Copy Gantt Chart template
-if [ -f "updated-gantt-template.html" ]; then
-    cp updated-gantt-template.html frontend/templates/feature/gantt.html
+if [ -f "updates/updated-gantt-template.html" ]; then
+    cp updates/updated-gantt-template.html frontend/templates/feature/gantt.html
     echo -e "${GREEN}✓ Installed updated Gantt Chart template${NC}"
 else
     echo -e "${RED}Error: updated-gantt-template.html not found${NC}"
 fi
 
 # Copy Extended View template
-if [ -f "updated-extended-view-complete.html" ]; then
-    cp updated-extended-view-complete.html frontend/templates/feature/extended_overlap.html
+if [ -f "updates/updated-extended-view-complete.html" ]; then
+    cp updates/updated-extended-view-complete.html frontend/templates/feature/extended_overlap.html
     echo -e "${GREEN}✓ Installed updated Extended View template${NC}"
 else
     echo -e "${RED}Error: updated-extended-view-complete.html not found${NC}"
@@ -74,16 +76,16 @@ else
 fi
 
 # Copy Reports template
-if [ -f "reports-page.html" ]; then
-    cp reports-page.html frontend/templates/feature/reports.html
+if [ -f "updates/reports-page.html" ]; then
+    cp updates/reports-page.html frontend/templates/feature/reports.html
     echo -e "${GREEN}✓ Installed Reports template${NC}"
 else
     echo -e "${RED}Error: reports-page.html not found${NC}"
 fi
 
 # Update experimental dashboard
-if [ -f "completed-experimental-dashboard.html" ]; then
-    cp completed-experimental-dashboard.html frontend/templates/test/experimental_dashboard.html
+if [ -f "updates/completed-experimental-dashboard.html" ]; then
+    cp updates/completed-experimental-dashboard.html frontend/templates/test/experimental_dashboard.html
     echo -e "${GREEN}✓ Installed updated Experimental Dashboard${NC}"
 else
     echo -e "${RED}Error: completed-experimental-dashboard.html not found${NC}"
@@ -92,8 +94,8 @@ echo ""
 
 # Update check script
 echo -e "${BLUE}Updating frontend check script...${NC}"
-if [ -f "updated-check-frontend.sh" ]; then
-    cp updated-check-frontend.sh check_frontend_enhanced.sh
+if [ -f "updates/updated-check-frontend.sh" ]; then
+    cp updates/updated-check-frontend.sh check_frontend_enhanced.sh
     chmod +x check_frontend_enhanced.sh
     echo -e "${GREEN}✓ Updated check_frontend_enhanced.sh${NC}"
 else

@@ -83,7 +83,7 @@ def api_upload():
 def api_download():
     return send_file(DATA_FILE, as_attachment=True)
 
-# Feature routes (moved from /test/* to /feature/*)
+# Feature routes (direct routes without /feature/ prefix)
 @app.route('/gantt')
 def gantt():
     return render_template('feature/gantt.html')
@@ -105,22 +105,26 @@ def reports():
 def dashboard():
     return render_template('dashboard.html')
 
-# Legacy test routes (keeping for backward compatibility)
-@app.route('/test/gantt')
-def test_gantt():
-    return render_template('test/gantt.html')
-
-@app.route('/test/extended')
-def test_extended():
-    return render_template('test/extended_overlap.html')
-
-@app.route('/test/editor')
-def test_editor():
-    return render_template('test/wardrobe_editor.html')
-
+# Testing routes
 @app.route('/test/dashboard')
 def test_dashboard():
     return render_template('test/experimental_dashboard.html')
+
+# Legacy test routes (keeping for backward compatibility)
+@app.route('/test/gantt')
+def test_gantt():
+    # Redirect to the new route
+    return render_template('feature/gantt.html')
+
+@app.route('/test/extended')
+def test_extended():
+    # Redirect to the new route
+    return render_template('feature/extended_overlap.html')
+
+@app.route('/test/editor')
+def test_editor():
+    # Redirect to the new route
+    return render_template('feature/wardrobe_editor.html')
 
 if __name__ == "__main__":
     PORT = 5000

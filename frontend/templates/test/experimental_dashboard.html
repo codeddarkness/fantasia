@@ -26,17 +26,17 @@
     .container {
       display: flex;
       flex: 1;
-      height: calc(100vh - 60px); /* Adjust for header height */
+      height: calc(100vh - 100px); /* Adjust for header and status bar */
     }
     
     .content-area {
-      flex: 0.8; /* 80% of space */
+      flex: 0.9; /* 90% of space */
       padding: 20px;
       overflow: auto;
     }
     
     .side-menu {
-      flex: 0.2; /* 20% of space */
+      flex: 0.1; /* 10% of space */
       background-color: #444;
       color: white;
       padding: 20px;
@@ -52,7 +52,7 @@
       color: white;
       border: none;
       border-radius: 4px;
-      text-align: left;
+      text-align: center;
       cursor: pointer;
       transition: background-color 0.3s;
     }
@@ -66,7 +66,7 @@
     }
     
     .feature-icon {
-      margin-right: 10px;
+      margin-right: 5px;
     }
     
     iframe {
@@ -118,19 +118,28 @@
       color: #333;
     }
     
-    .status-badge {
-      display: inline-block;
-      padding: 4px 8px;
-      border-radius: 10px;
-      font-size: 12px;
-      color: white;
-      background-color: #4CAF50;
-    }
-    
     .help-section {
       margin-top: 30px;
       padding-top: 20px;
       border-top: 1px solid #ddd;
+    }
+    
+    .status-bar {
+      background-color: #333;
+      color: white;
+      padding: 8px 20px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .status-indicator {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    
+    .version-info {
+      color: #aaa;
     }
   </style>
 </head>
@@ -148,19 +157,6 @@
         <div class="dashboard-grid">
           <div class="dashboard-card">
             <div class="card-header">
-              <h3 class="card-title">System Status</h3>
-              <span class="status-badge">Online</span>
-            </div>
-            <div>
-              <p>Frontend Version: v0.4.0</p>
-              <p>Backend Version: v0.4.0</p>
-              <p>Inventory Items: 160</p>
-              <p>Scheduled Events: 48</p>
-            </div>
-          </div>
-          
-          <div class="dashboard-card">
-            <div class="card-header">
               <h3 class="card-title">Today's Schedule</h3>
             </div>
             <div>
@@ -168,6 +164,7 @@
               <p>3 dressers assigned</p>
               <p>First change: 18:00</p>
               <p>Last change: 21:45</p>
+              <p>Scheduled Events: 48</p>
             </div>
           </div>
           
@@ -180,6 +177,19 @@
               <p>In Use: 41</p>
               <p>Cleaning: 8</p>
               <p>In Repair: 6</p>
+              <p>Inventory Items: 160</p>
+            </div>
+          </div>
+          
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h3 class="card-title">Tasks</h3>
+            </div>
+            <div>
+              <p>• Check costume condition (High Priority)</p>
+              <p>• Order new accessories (Due: Tomorrow)</p>
+              <p>• Schedule fittings (In Progress)</p>
+              <p>• Update inventory database (Completed)</p>
             </div>
           </div>
           
@@ -188,10 +198,10 @@
               <h3 class="card-title">Recent Activity</h3>
             </div>
             <div>
-              <p>• New wardrobe item added (2 mins ago)</p>
+              <p>• New costume item added (2 mins ago)</p>
               <p>• Schedule updated (15 mins ago)</p>
               <p>• Inventory report exported (1 hour ago)</p>
-              <p>• New dresser added (2 hours ago)</p>
+              <p>• Wardrobe location changed (2 hours ago)</p>
             </div>
           </div>
         </div>
@@ -199,42 +209,36 @@
         <div class="help-section">
           <h3>Getting Started</h3>
           <p>Use the menu on the right to navigate between features. Each feature will load in this content area, allowing you to work without switching pages.</p>
-          <p>This experimental dashboard is designed to improve workflow by keeping all tools accessible from a single interface.</p>
+          <p>This experimental dashboard is designed to improve workflow efficiency with a more compact menu that allows for maximum content display.</p>
         </div>
       </div>
     </div>
     
     <div class="side-menu">
-      <h2>Features</h2>
       <button class="feature-button active" data-url="/dashboard" onclick="loadContent(this)">
-        <span class="feature-icon">📊</span> Dashboard
+        📊
       </button>
       <button class="feature-button" data-url="/gantt" onclick="loadContent(this)">
-        <span class="feature-icon">📅</span> Gantt Chart
+        📅
       </button>
       <button class="feature-button" data-url="/extended" onclick="loadContent(this)">
-        <span class="feature-icon">📈</span> Extended View
+        📈
       </button>
       <button class="feature-button" data-url="/editor" onclick="loadContent(this)">
-        <span class="feature-icon">🛠️</span> Inventory Editor
+        🛠️
       </button>
       <button class="feature-button" data-url="/reports" onclick="loadContent(this)">
-        <span class="feature-icon">📄</span> Reports
-      </button>
-      
-      <hr style="border-color: #555; margin: 20px 0;">
-      
-      <h2>Tools</h2>
-      <button class="feature-button" data-url="/git-manager" onclick="loadContent(this)">
-        <span class="feature-icon">🔄</span> Git Manager
-      </button>
-      <button class="feature-button" data-url="/import-tool" onclick="loadContent(this)">
-        <span class="feature-icon">📥</span> Import Tool
+        📄
       </button>
       <button class="feature-button" data-url="/legacy" onclick="loadContent(this)">
-        <span class="feature-icon">🧩</span> Legacy View
+        🧩
       </button>
     </div>
+  </div>
+  
+  <div class="status-bar">
+    <div class="status-indicator">System Status: Online</div>
+    <div class="version-info">Frontend Version: v0.5.0 | Backend Version: v0.5.0</div>
   </div>
   
   <script>
@@ -275,6 +279,23 @@
       // Set the active button
       const dashboardButton = document.querySelector('[data-url="/dashboard"]');
       dashboardButton.classList.add('active');
+      
+      // Add tooltips to buttons
+      const buttons = document.querySelectorAll('.feature-button');
+      
+      const tooltips = {
+        '/dashboard': 'Dashboard',
+        '/gantt': 'Gantt Chart',
+        '/extended': 'Extended View',
+        '/editor': 'Inventory Editor',
+        '/reports': 'Reports',
+        '/legacy': 'Legacy View'
+      };
+      
+      buttons.forEach(button => {
+        const url = button.getAttribute('data-url');
+        button.title = tooltips[url] || url;
+      });
     });
   </script>
 </body>

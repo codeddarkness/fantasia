@@ -10,92 +10,132 @@ URL="http://127.0.0.1:$PORT"
 echo "🔎 Checking Costume Scheduler at $URL" | tee "$LOGFILE"
 
 # Check base functionality
-echo -e "\n[1] Checking root /" | tee -a "$LOGFILE"
+echo -e "\n[1] Checking root (Dashboard) /" | tee -a "$LOGFILE"
 curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL" | tee -a "$LOGFILE"
 
-echo -e "\n[2] Checking /api/data" | tee -a "$LOGFILE"
-curl -s -o /tmp/api_data.json "$URL/api/data"
-if [ -s /tmp/api_data.json ]; then
-  echo "✅ API data endpoint is working" | tee -a "$LOGFILE"
-else
-  echo "❌ API data endpoint is NOT working" | tee -a "$LOGFILE"
-fi
+echo -e "\n[2] Checking legacy page /legacy" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/legacy" | tee -a "$LOGFILE"
 
-echo -e "\n[3] Checking main JS script" | tee -a "$LOGFILE"
-curl -s -I "$URL/static/js/script.js" | tee -a "$LOGFILE"
+echo -e "\n[3] Checking dashboard /dashboard" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/dashboard" | tee -a "$LOGFILE"
 
-echo -e "\n[4] Checking core HTML template" | tee -a "$LOGFILE"
-curl -s "$URL" | grep -i "<html" &>/dev/null
-if [ $? -eq 0 ]; then
-  echo "✅ HTML page detected." | tee -a "$LOGFILE"
-else
-  echo "❌ HTML not detected in root response." | tee -a "$LOGFILE"
-fi
+# Check primary feature pages
+echo -e "\n[4] Checking Gantt Chart /gantt" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/gantt" | tee -a "$LOGFILE"
 
-# Check all new pages
-echo -e "\n[5] Checking test/gantt" | tee -a "$LOGFILE"
+echo -e "\n[5] Checking Extended View /extended" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/extended" | tee -a "$LOGFILE"
+
+echo -e "\n[6] Checking Inventory Editor /editor" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/editor" | tee -a "$LOGFILE"
+
+echo -e "\n[7] Checking Reports /reports" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/reports" | tee -a "$LOGFILE"
+
+# Check experimental page
+echo -e "\n[8] Checking Experimental Dashboard /test/dashboard" | tee -a "$LOGFILE"
+curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/test/dashboard" | tee -a "$LOGFILE"
+
+# Check backward compatibility routes
+echo -e "\n[9] Checking backward compatibility /test/gantt" | tee -a "$LOGFILE"
 curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/test/gantt" | tee -a "$LOGFILE"
 
-echo -e "\n[6] Checking test/extended" | tee -a "$LOGFILE"
+echo -e "\n[10] Checking backward compatibility /test/extended" | tee -a "$LOGFILE"
 curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/test/extended" | tee -a "$LOGFILE"
 
-echo -e "\n[7] Checking test/editor" | tee -a "$LOGFILE"
+echo -e "\n[11] Checking backward compatibility /test/editor" | tee -a "$LOGFILE"
 curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/test/editor" | tee -a "$LOGFILE"
 
-echo -e "\n[8] Checking dashboard" | tee -a "$LOGFILE"
-curl -s -o /dev/null -w "Status: %{http_code}\n" "$URL/dashboard" | tee -a "$LOGFILE"
+# Check API
+echo -e "\n[12] Checking /api/data" | tee -a "$LOGFILE"
+curl -s -I "$URL/api/data" | head -1 | tee -a "$LOGFILE"
+
+echo -e "\n[13] Checking /api/download" | tee -a "$LOGFILE"
+curl -s -I "$URL/api/download" | head -1 | tee -a "$LOGFILE"
+
+# Check static resources
+echo -e "\n[14] Checking JS script" | tee -a "$LOGFILE"
+curl -s -I "$URL/static/js/script.js" | head -1 | tee -a "$LOGFILE"
+
+echo -e "\n[15] Checking CSS styles" | tee -a "$LOGFILE"
+curl -s -I "$URL/static/css/styles.css" | head -1 | tee -a "$LOGFILE"
 
 # Summary
 echo -e "\n===== SUMMARY =====" | tee -a "$LOGFILE"
-MAIN_PAGE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
-GANTT_PAGE=$(curl -s -o /dev/null -w "%{http_code}" "$URL/test/gantt")
-EXTENDED_PAGE=$(curl -s -o /dev/null -w "%{http_code}" "$URL/test/extended")
-EDITOR_PAGE=$(curl -s -o /dev/null -w "%{http_code}" "$URL/test/editor")
-DASHBOARD_PAGE=$(curl -s -o /dev/null -w "%{http_code}" "$URL/dashboard")
+DASHBOARD=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
+LEGACY=$(curl -s -o /dev/null -w "%{http_code}" "$URL/legacy")
+GANTT=$(curl -s -o /dev/null -w "%{http_code}" "$URL/gantt")
+EXTENDED=$(curl -s -o /dev/null -w "%{http_code}" "$URL/extended")
+EDITOR=$(curl -s -o /dev/null -w "%{http_code}" "$URL/editor")
+REPORTS=$(curl -s -o /dev/null -w "%{http_code}" "$URL/reports")
+API_DATA=$(curl -s -o /dev/null -w "%{http_code}" "$URL/api/data")
 
-echo "Main page (/) status: $MAIN_PAGE" | tee -a "$LOGFILE"
-echo "Gantt page (/test/gantt) status: $GANTT_PAGE" | tee -a "$LOGFILE"
-echo "Extended page (/test/extended) status: $EXTENDED_PAGE" | tee -a "$LOGFILE"
-echo "Editor page (/test/editor) status: $EDITOR_PAGE" | tee -a "$LOGFILE"
-echo "Dashboard page (/dashboard) status: $DASHBOARD_PAGE" | tee -a "$LOGFILE"
+echo "Dashboard (/) status: $DASHBOARD" | tee -a "$LOGFILE"
+echo "Legacy (/legacy) status: $LEGACY" | tee -a "$LOGFILE"
+echo "Gantt Chart (/gantt) status: $GANTT" | tee -a "$LOGFILE"
+echo "Extended View (/extended) status: $EXTENDED" | tee -a "$LOGFILE"
+echo "Inventory Editor (/editor) status: $EDITOR" | tee -a "$LOGFILE"
+echo "Reports (/reports) status: $REPORTS" | tee -a "$LOGFILE"
+echo "API Data (/api/data) status: $API_DATA" | tee -a "$LOGFILE"
 
-# Check for version
-VERSION=$(grep -o '"version":"[^"]*"' /tmp/api_data.json | head -1 | cut -d'"' -f4)
-if [ -n "$VERSION" ]; then
-  echo "API version: $VERSION" | tee -a "$LOGFILE"
+SUCCESS_COUNT=0
+TOTAL_CHECKS=7
+
+if [ "$DASHBOARD" == "200" ]; then
+  echo "✅ Dashboard is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
 else
-  echo "API version: Could not detect" | tee -a "$LOGFILE"
+  echo "❌ Dashboard is NOT accessible" | tee -a "$LOGFILE"
 fi
 
-# Evaluations
-if [ "$MAIN_PAGE" == "200" ]; then
-  echo "✅ Main page is accessible" | tee -a "$LOGFILE"
+if [ "$LEGACY" == "200" ]; then
+  echo "✅ Legacy page is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
 else
-  echo "❌ Main page is NOT accessible" | tee -a "$LOGFILE"
+  echo "❌ Legacy page is NOT accessible" | tee -a "$LOGFILE"
 fi
 
-if [ "$GANTT_PAGE" == "200" ]; then
-  echo "✅ Gantt page is accessible" | tee -a "$LOGFILE"
+if [ "$GANTT" == "200" ]; then
+  echo "✅ Gantt Chart is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
 else
-  echo "❌ Gantt page is NOT accessible" | tee -a "$LOGFILE"
+  echo "❌ Gantt Chart is NOT accessible" | tee -a "$LOGFILE"
 fi
 
-if [ "$EXTENDED_PAGE" == "200" ]; then
-  echo "✅ Extended page is accessible" | tee -a "$LOGFILE"
+if [ "$EXTENDED" == "200" ]; then
+  echo "✅ Extended View is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
 else
-  echo "❌ Extended page is NOT accessible" | tee -a "$LOGFILE"
+  echo "❌ Extended View is NOT accessible" | tee -a "$LOGFILE"
 fi
 
-if [ "$EDITOR_PAGE" == "200" ]; then
-  echo "✅ Editor page is accessible" | tee -a "$LOGFILE"
+if [ "$EDITOR" == "200" ]; then
+  echo "✅ Inventory Editor is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
 else
-  echo "❌ Editor page is NOT accessible" | tee -a "$LOGFILE"
+  echo "❌ Inventory Editor is NOT accessible" | tee -a "$LOGFILE"
 fi
 
-if [ "$DASHBOARD_PAGE" == "200" ]; then
-  echo "✅ Dashboard page is accessible" | tee -a "$LOGFILE"
+if [ "$REPORTS" == "200" ]; then
+  echo "✅ Reports is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
 else
-  echo "❌ Dashboard page is NOT accessible" | tee -a "$LOGFILE"
+  echo "❌ Reports is NOT accessible" | tee -a "$LOGFILE"
+fi
+
+if [ "$API_DATA" == "200" ]; then
+  echo "✅ API Data is accessible" | tee -a "$LOGFILE"
+  SUCCESS_COUNT=$((SUCCESS_COUNT + 1))
+else
+  echo "❌ API Data is NOT accessible" | tee -a "$LOGFILE"
+fi
+
+# Print overall status
+echo -e "\nSystem Status: $SUCCESS_COUNT/$TOTAL_CHECKS checks passed" | tee -a "$LOGFILE"
+if [ "$SUCCESS_COUNT" -eq "$TOTAL_CHECKS" ]; then
+  echo "✅ All checks passed!" | tee -a "$LOGFILE"
+else
+  echo "⚠️ Some checks failed. Review log for details." | tee -a "$LOGFILE"
 fi
 
 echo -e "\n📄 Full log saved to $LOGFILE"
