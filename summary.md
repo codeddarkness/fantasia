@@ -120,15 +120,12 @@ The last patch file (test.html) included this header:
 
 html
 Copy
-Edit
 <!-- PATCH-PATH: frontend/templates/test.html -->
 This allowed prepare_patch.sh to detect it and move it into the correct patch version. Any files not using this header will be ignored.
 
 If you're handing this off, just give the recipient the full project folder. With Python and jq installed, they can:
 
 bash
-Copy
-Edit
 bash prepare_patch.sh
 bash apply_patch.sh
 python3 backend/app.py
