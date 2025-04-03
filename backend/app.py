@@ -92,6 +92,11 @@ def test_extended():
 def test_editor():
     return render_template('test/wardrobe_editor.html')
 
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
 if __name__ == "__main__":
     PORT = 5000
 
