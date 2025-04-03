@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "wardrobe_items": [],
+  "agents": {
+    "dressers": [],
+    "actors": [],
+    "managers": []
+  },
+  "tasks": [],
+  "schedules": [],
+  "productions": []
+}

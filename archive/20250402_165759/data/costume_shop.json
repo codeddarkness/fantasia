@@ -1,0 +1,27 @@
+{
+  "version": "0.1.0",
+  "wardrobe_items": [],
+  "agents": {
+    "dressers": [],
+    "actors": [],
+    "managers": []
+  },
+  "tasks": [],
+  "schedules": [
+    {
+      "time": "2025-04-02T18:15:00",
+      "actor": "actor1",
+      "dresser": "dresser1",
+      "item": "item001",
+      "duration_minutes": 15
+    },
+    {
+      "time": "2025-04-02T18:20:00",
+      "actor": "actor2",
+      "dresser": "dresser1",
+      "item": "item002",
+      "duration_minutes": 10
+    }
+  ]
+}
+
