@@ -77,11 +77,6 @@ def api_upload():
 def api_download():
     return send_file(DATA_FILE, as_attachment=True)
 
-
-@app.route('/test/gantt')
-def test_gantt():
-    return render_template('test/gantt.html')
-
 if __name__ == "__main__":
     PORT = 5000
 

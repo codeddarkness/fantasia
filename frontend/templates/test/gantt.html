@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Costume Scheduler - Gantt Chart</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <style>
+    /* Layout */
+    body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h1 { margin-bottom: 20px; }
+    
+    /* Controls */
+    .controls { margin-bottom: 20px; padding: 10px; background-color: #f5f5f5; border-radius: 4px; }
+    .controls label { margin-right: 10px; }
+    #date-selector { padding: 8px; font-size: 16px; }
+    #refresh-btn { padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    
+    /* Tabs */
+    .tabs { display: flex; border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+    .tab { padding: 10px 20px; cursor: pointer; border: 1px solid transparent; border-bottom: none; }
+    .tab.active { background-color: #f5f5f5; border-color: #ccc; border-radius: 4px 4px 0 0; }
+    
+    /* Content areas */
+    .content { display: none; padding: 20px; border: 1px solid #ccc; border-top: none; }
+    .content.active { display: block; }
+    
+    /* Schedule items */
+    .schedule-item { 
+      background-color: #4CAF50; 
+      color: white; 
+      padding: 10px 15px; 
+      margin-bottom: 10px; 
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    /* Wardrobe table */
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #f2f2f2; }
+    
+    /* Status indicators */
+    .available { color: green; }
+    .in-use { color: blue; }
+    .cleaning { color: orange; }
+    
+    /* Search */
+    .search-box { width: 100%; padding: 10px; margin-bottom: 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Costume Scheduler</h1>
+  
+  <div class="controls">
+    <label for="date-selector">Date:</label>
+    <input type="date" id="date-selector">
+    <button id="refresh-btn">Refresh</button>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="schedule">Schedule</div>
+    <div class="tab" data-tab="wardrobe">Wardrobe</div>
+    <div class="tab" data-tab="debug">Debug</div>
+  </div>
+  
+  <div id="schedule" class="content active">
+    <h2>Costume Change Schedule</h2>
+    <div id="schedule-list"></div>
+  </div>
+  
+  <div id="wardrobe" class="content">
+    <h2>Wardrobe Inventory</h2>
+    <input type="text" id="search-box" class="search-box" placeholder="Search inventory...">
+    <div id="wardrobe-list"></div>
+  </div>
+  
+  <div id="debug" class="content">
+    <h2>Debug Data</h2>
+    <pre id="debug-data" style="background:#f5f5f5; padding:10px; overflow:auto; max-height:500px;"></pre>
+  </div>
+  
+  <script src="/static/js/test/gantt.js"></script>
+</body>
+</html>

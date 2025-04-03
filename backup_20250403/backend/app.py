@@ -77,11 +77,6 @@ def api_upload():
 def api_download():
     return send_file(DATA_FILE, as_attachment=True)
 
-
-@app.route('/test/gantt')
-def test_gantt():
-    return render_template('test/gantt.html')
-
 if __name__ == "__main__":
     PORT = 5000
 
@@ -130,8 +125,3 @@ def legacy_preview(): return render_template("legacy_gantt_preview.html")
 
 @app.route("/vis-preview")
 def vis_preview(): return render_template("vis_gantt_preview.html")
-
-# Add this to your Flask routes in backend/app.py:
-@app.route('/test/gantt')
-def test_gantt():
-        return render_template('test/gantt.html')

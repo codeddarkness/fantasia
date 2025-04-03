@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Costume Scheduler Status</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+    .status-good { color: green; }
+    .status-bad { color: red; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #f2f2f2; }
+    .action-button { display: inline-block; margin: 5px; padding: 8px 16px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Costume Scheduler Status</h1>
+  <p>Last checked: Thu Apr  3 04:32:46 MDT 2025</p>
+  
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>Main Page</td>
+      <td class="status-good">
+        ✅ Available
+      </td>
+    </tr>
+    <tr>
+      <td>Test Page</td>
+      <td class="status-good">
+        ✅ Available
+      </td>
+    </tr>
+    <tr>
+      <td>Data Integrity</td>
+      <td class="status-good">
+        ✅ Valid
+      </td>
+    </tr>
+  </table>
+  
+  <h2>Quick Actions</h2>
+  <a href="http://127.0.0.1:5000" class="action-button">View Main Page</a>
+  <a href="http://127.0.0.1:5000/test/gantt" class="action-button">View Test Page</a>
+  <a href="http://127.0.0.1:5000/api/data" class="action-button">View API Data</a>
+  
+  <h2>Log Excerpt</h2>
+  <pre>Content-Disposition: inline; filename=gantt-test.js
+Content-Type: text/javascript; charset=utf-8
+Content-Length: 6140
+Last-Modified: Thu, 03 Apr 2025 10:19:13 GMT
+Cache-Control: no-cache
+ETag: "1743675553.7303457-6140-817699901"
+Date: Thu, 03 Apr 2025 10:32:46 GMT
+Connection: close
+
+
+[7] Data validation
+  - Wardrobe items found:        1
+  - Schedule entries found:        1
+✅ Data format appears valid
+
+===== SUMMARY =====
+Main page (/) status: 200
+Test page (/test/gantt) status: 200
+✅ Main page is accessible
+✅ Test page is accessible</pre>
+</body>
+</html>

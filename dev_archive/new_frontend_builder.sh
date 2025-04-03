@@ -1,5 +1,8 @@
 #!/bin/bash
 
+cat << 'ENHANCED_CHECK_SCRIPT' > check_enhanced.sh
+#!/bin/bash
+
 PORT=${1:-5000}
 LOGDIR=logs
 LOGFILE=${LOGDIR}/"costume_check_$(date +%Y%m%d_%H%M%S).log"
@@ -129,3 +132,7 @@ EOF
 
 echo "✅ Status page generated: status.html"
 echo "To open status page: open status.html"
+ENHANCED_CHECK_SCRIPT
+
+chmod +x check_enhanced.sh
+echo "✅ Enhanced check script created. Run it with: ./check_enhanced.sh"
