@@ -82,6 +82,11 @@ def api_download():
 def test_gantt():
     return render_template('test/gantt.html')
 
+
+@app.route('/test/extended')
+def test_extended():
+    return render_template('test/extended_overlap.html')
+
 if __name__ == "__main__":
     PORT = 5000
 
