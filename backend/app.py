@@ -87,6 +87,11 @@ def test_gantt():
 def test_extended():
     return render_template('test/extended_overlap.html')
 
+
+@app.route('/test/editor')
+def test_editor():
+    return render_template('test/wardrobe_editor.html')
+
 if __name__ == "__main__":
     PORT = 5000
 
