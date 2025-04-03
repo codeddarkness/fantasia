@@ -1,2 +1,10 @@
 data/
 logs/
+dev_archive/
+archive
+backup_*/
+backup/
+dev_archive/
+keeps/
+logs/
+patches_archive/
