@@ -1,0 +1,4 @@
+// PATCH v0.3.5 - From: frontend/static/css/styles.css
+body { font-family: Arial, sans-serif; padding: 20px; }
+#ganttContainer { margin-top: 20px; }
+.overlap { background-color: red; }

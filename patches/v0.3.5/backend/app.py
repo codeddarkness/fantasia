@@ -1,3 +1,4 @@
+// PATCH v0.3.5 - From: backend/app.py
 from flask import Flask, render_template, request, jsonify, send_file
 from datetime import datetime
 import socket
@@ -115,13 +116,3 @@ if __name__ == "__main__":
 
     app.run(debug=True, host="0.0.0.0", port=PORT, use_reloader=False)
 
-
-# PATCH v0.3.6 routes
-@app.route("/test")
-def test_view(): return render_template("test.html")
-
-@app.route("/legacy-preview")
-def legacy_preview(): return render_template("legacy_gantt_preview.html")
-
-@app.route("/vis-preview")
-def vis_preview(): return render_template("vis_gantt_preview.html")

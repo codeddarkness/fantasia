@@ -106,3 +106,5 @@ Check `version.json` for current version:
 ---
 
 For bugs or feature updates, refer to `CHANGELOG.md` or use included patching system.
+- vv0.3.5: Consolidated frontend + backend patch with test page additions
+- vv0.3.5: Consolidated frontend + backend patch with test page additions
