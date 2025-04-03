@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Costume Scheduler - Reports</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    h1, h2, h3 {
+      color: #333;
+    }
+    
+    .main-nav {
+      background-color: #444;
+      display: flex;
+      padding: 10px 20px;
+    }
+    
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 15px;
+      margin-right: 5px;
+      border-radius: 4px;
+    }
+    
+    .main-nav a:hover, .main-nav a.active {
+      background-color: #555;
+    }
+    
+    .report-options {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .report-options select, .report-options input {
+      padding: 8px;
+      margin-right: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .report-options button {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    .report-content {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    
+    .report-controls {
+      display: flex;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    
+    .action-button {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    .help-link {
+      display: inline-block;
+      margin-left: 10px;
+      color: #4CAF50;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    
+    .help-content {
+      display: none;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 10px;
+      border-left: 4px solid #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Costume Scheduler - Reports</h1>
+  </header>
+  
+  <div class="main-nav">
+    <a href="/">Dashboard</a>
+    <a href="/gantt">Gantt Chart</a>
+    <a href="/extended">Extended View</a>
+    <a href="/editor">Inventory Editor</a>
+    <a href="/reports" class="active">Reports</a>
+  </div>
+  
+  <div class="container">
+    <div class="report-options">
+      <h2>Generate Report <a href="#" class="help-link" onclick="toggleHelp(); return false;">Help</a></h2>
+      
+      <div class="help-content" id="help-content">
+        <h3>Reports Overview</h3>
+        <p>This page allows you to generate various reports for your costume inventory and scheduling.</p>
+        <ul>
+          <li><strong>Inventory Summary:</strong> Get an overview of your entire costume inventory, broken down by category, condition, and status.</li>
+          <li><strong>Schedule Analysis:</strong> View daily or weekly reports of costume changes and detect potential scheduling conflicts.</li>
+          <li><strong>Dresser Workload:</strong> Analyze workload distribution among dressers to ensure balanced assignments.</li>
+          <li><strong>Inventory Usage:</strong> See which costume items are most frequently used in current scheduling.</li>
+        </ul>
+        <p>Reports can be exported as CSV or PDF files for sharing with your team or for printing.</p>
+      </div>
+      
+      <div class="report-controls">
+        <select id="report-type">
+          <option value="inventory">Inventory Summary</option>
+          <option value="schedule">Schedule Analysis</option>
+          <option value="dresser">Dresser Workload</option>
+          <option value="usage">Inventory Usage</option>
+        </select>
+        
+        <select id="time-range">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+          <option value="all">All Data</option>
+        </select>
+        
+        <input type="date" id="date-selector">
+        
+        <button id="generate-btn" class="action-button">Generate Report</button>
+      </div>
+    </div>
+    
+    <div class="report-content">
+      <h2 id="report-title">Inventory Summary Report</h2>
+      
+      <div class="report-controls">
+        <button id="export-csv-btn" class="action-button">Export as CSV</button>
+        <button id="export-pdf-btn" class="action-button">Export as PDF</button>
+        <button id="copy-btn" class="action-button">Copy to Clipboard</button>
+      </div>
+      
+      <div id="report-data">
+        <!-- Report data will be populated here -->
+        <table id="inventory-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Total Items</th>
+              <th>Available</th>
+              <th>In Use</th>
+              <th>Cleaning</th>
+              <th>In Repair</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Hats</td>
+              <td>24</td>
+              <td>15</td>
+              <td>5</td>
+              <td>2</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>Dresses</td>
+              <td>36</td>
+              <td>22</td>
+              <td>10</td>
+              <td>3</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>Suits</td>
+              <td>18</td>
+              <td>10</td>
+              <td>6</td>
+              <td>1</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>Accessories</td>
+              <td>52</td>
+              <td>40</td>
+              <td>12</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Shoes</td>
+              <td>30</td>
+              <td>18</td>
+              <td>8</td>
+              <td>2</td>
+              <td>2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Toggle help content visibility
+    function toggleHelp() {
+      const helpContent = document.getElementById('help-content');
+      if (helpContent.style.display === 'block') {
+        helpContent.style.display = 'none';
+      } else {
+        helpContent.style.display = 'block';
+      }
+    }
+    
+    // Set default date to today
+    document.addEventListener('DOMContentLoaded', function() {
+      const dateSelector = document.getElementById('date-selector');
+      const today = new Date().toISOString().split('T')[0];
+      dateSelector.value = today;
+      
+      // Add event listeners
+      document.getElementById('generate-btn').addEventListener('click', generateReport);
+      document.getElementById('export-csv-btn').addEventListener('click', exportCSV);
+      document.getElementById('export-pdf-btn').addEventListener('click', exportPDF);
+      document.getElementById('copy-btn').addEventListener('click', copyToClipboard);
+      document.getElementById('report-type').addEventListener('change', updateReportOptions);
+    });
+    
+    // Update report options based on selected report type
+    function updateReportOptions() {
+      const reportType = document.getElementById('report-type').value;
+      const timeRange = document.getElementById('time-range');
+      const dateSelector = document.getElementById('date-selector');
+      
+      if (reportType === 'inventory') {
+        timeRange.disabled = true;
+        dateSelector.disabled = true;
+      } else {
+        timeRange.disabled = false;
+        dateSelector.disabled = false;
+      }
+    }
+    
+    // Generate report based on selected options
+    function generateReport() {
+      const reportType = document.getElementById('report-type').value;
+      const timeRange = document.getElementById('time-range').value;
+      const date = document.getElementById('date-selector').value;
+      
+      // Update report title
+      const reportTitle = document.getElementById('report-title');
+      let titleText = '';
+      
+      switch (reportType) {
+        case 'inventory':
+          titleText = 'Inventory Summary Report';
+          break;
+        case 'schedule':
+          titleText = 'Schedule Analysis Report';
+          break;
+        case 'dresser':
+          titleText = 'Dresser Workload Report';
+          break;
+        case 'usage':
+          titleText = 'Inventory Usage Report';
+          break;
+      }
+      
+      if (reportType !== 'inventory') {
+        titleText += ` (${timeRange.charAt(0).toUpperCase() + timeRange.slice(1)})`;
+      }
+      
+      reportTitle.textContent = titleText;
+      
+      // In a real implementation, we would fetch the actual report data from the API
+      // For this demo, we'll just show different tables based on the report type
+      const reportData = document.getElementById('report-data');
+      
+      if (reportType === 'inventory') {
+        // Keep the existing inventory table
+      } else if (reportType === 'schedule') {
+        reportData.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Actor</th>
+                <th>Costume Item</th>
+                <th>Dresser</th>
+                <th>Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${date}</td>
+                <td>18:00</td>
+                <td>Alice Smith</td>
+                <td>Evening Gown (Red)</td>
+                <td>John Davis</td>
+                <td>10 min</td>
+              </tr>
+              <tr>
+                <td>${date}</td>
+                <td>18:15</td>
+                <td>Bob Johnson</td>
+                <td>Formal Suit (Black)</td>
+                <td>Sarah Wilson</td>
+                <td>12 min</td>
+              </tr>
+              <tr>
+                <td>${date}</td>
+                <td>18:30</td>
+                <td>Charlie Brown</td>
+                <td>Casual Outfit (Blue)</td>
+                <td>John Davis</td>
+                <td>8 min</td>
+              </tr>
+              <tr>
+                <td>${date}</td>
+                <td>19:00</td>
+                <td>Diana Lee</td>
+                <td>Period Dress (Victorian)</td>
+                <td>Sarah Wilson</td>
+                <td>15 min</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else if (reportType === 'dresser') {
+        reportData.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Dresser</th>
+                <th>Total Assignments</th>
+                <th>Total Duration</th>
+                <th>Earliest Time</th>
+                <th>Latest Time</th>
+                <th>Conflicts</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>John Davis</td>
+                <td>12</td>
+                <td>120 min</td>
+                <td>18:00</td>
+                <td>20:30</td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>Sarah Wilson</td>
+                <td>10</td>
+                <td>105 min</td>
+                <td>18:15</td>
+                <td>21:00</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td>Mike Thompson</td>
+                <td>8</td>
+                <td>85 min</td>
+                <td>18:45</td>
+                <td>20:15</td>
+                <td>0</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      } else if (reportType === 'usage') {
+        reportData.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Item ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Times Used</th>
+                <th>Last Used</th>
+                <th>Current Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>dress001</td>
+                <td>Evening Gown (Red)</td>
+                <td>Dresses</td>
+                <td>8</td>
+                <td>${date}</td>
+                <td>In Use</td>
+              </tr>
+              <tr>
+                <td>suit003</td>
+                <td>Formal Suit (Black)</td>
+                <td>Suits</td>
+                <td>6</td>
+                <td>${date}</td>
+                <td>In Use</td>
+              </tr>
+              <tr>
+                <td>hat007</td>
+                <td>Top Hat (Black)</td>
+                <td>Hats</td>
+                <td>5</td>
+                <td>${date}</td>
+                <td>Available</td>
+              </tr>
+              <tr>
+                <td>dress009</td>
+                <td>Period Dress (Victorian)</td>
+                <td>Dresses</td>
+                <td>4</td>
+                <td>${date}</td>
+                <td>In Use</td>
+              </tr>
+            </tbody>
+          </table>
+        `;
+      }
+    }
+    
+    // Export report as CSV
+    function exportCSV() {
+      alert('Exporting report as CSV...');
+      // In a real implementation, this would trigger a download of the CSV file
+    }
+    
+    // Export report as PDF
+    function exportPDF() {
+      alert('Exporting report as PDF...');
+      // In a real implementation, this would trigger a download of the PDF file
+    }
+    
+    // Copy report data to clipboard
+    function copyToClipboard() {
+      const reportData = document.getElementById('report-data').textContent;
+      navigator.clipboard.writeText(reportData)
+        .then(() => {
+          alert('Report data copied to clipboard!');
+        })
+        .catch(err => {
+          console.error('Error copying to clipboard:', err);
+          alert('Failed to copy report data.');
+        });
+    }
+  </script>
+</body>
+</html>

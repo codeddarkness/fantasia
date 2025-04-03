@@ -1,0 +1,76 @@
+######################
+# UPDATE REQUESTS ####
+Move the original 'Costume Scheduler' my_wardrobe/frontend/templates/index.html page to http://127.0.0.1:5000/legacy
+Add the features to export|download|upload|'copy to clipboard' buttons to the pages as appropriate for the feature/task
+Update the current/stable feature pages from the dashboard to /feature instead of /test/feature
+Set the dashboard as the initial page http://127.0.0.1:5000/ and keep the http://127.0.0.1:5000/dashboard
+ - create the reports page and update links
+Unify the menu system accross all the pages.
+For each page add a help link with overview and usage of the feature
+Clean up project directory keeping the frontend_checkers in the base directory my_wardrobe/ (reference project_expanded_for_cleanup.txt)
+The http://127.0.0.1:5000/test/extended and http://127.0.0.1:5000/test/gantt pages
+ - change the time frame from 8am to 12pm
+ - add a time frame selector to zoom in on blocks of time
+ - Change the time entry to down to the minute, or a selector to change the task time increment per show
+
+Create an experimental dashboard page with the feature menu on the right 20% side that opens the feature in the rest of the 80% of web page(allow page to scale with window)
+ - http://127.0.0.1:5000/test/dashboard
+
+Create a project git-manager with a menu to 
+  - create new dev/feature branches
+  - auto tag commits based on versions from the code/program files being commited or version.json(should be updated with every patch)
+  - a conflict resolver for files updates to the branches, either log and stash or push to new branch before pulling
+  - manage the .gitignore
+  - file remover from local and remote repo (such as binary files) through cached commits in branches
+  - file restore from branches and previous commits
+  - clone branch for dev or stable , if stable create branch and merge into main with version tagging
+  - revert to commit
+my_wardrobe git:(dev/inventory_editor git show-branch --all
+! [dev/inventory_editor] summary tweaks
+ ! [dev/new_inventory] Revert "pre mega inventory update"
+  ! [dev/new_inventory_stable] removed bad patch set
+   * [main] summary tweaks
+    ! [origin/dev/inventory_editor] wardrobe editor and dashboard added
+     ! [origin/dev/new_inventory] mega inventory add
+      ! [origin/dev/new_inventory_stable] removed bad patch set
+       ! [origin/main] summary tweaks
+--------
++  *   + [dev/inventory_editor] summary tweaks
++  *+  + [origin/dev/inventory_editor] wardrobe editor and dashboard added
++  *+  + [origin/dev/inventory_editor^] pre inventorys fix
++ +*+ ++ [dev/new_inventory_stable] removed bad patch set
++ +*+ ++ [dev/new_inventory_stable^] revert stable interface
++++*+ ++ [dev/new_inventory] Revert "pre mega inventory update"
++++*++++ [origin/dev/new_inventory] mega inventory add
+### END OF BRANCHES
+
+Update README.md with full deployment of the last stable version from main
+Update summary.md and fix the formatting
+Update changelog.md with all new completed tasks
+
+Review the patch-management scripts , workflow and recommend ways to simplify the original patching with the current workflow, and a cleanup scheme
+A bash script or python program to convert PDF inventory files from a pdf_imports/ directory to pdf_conversions/ into csv files to update/import items in the inventory
+- if a data field is missing for an item in pdf chart, fill the column with 'review'
+
+################################
+# FIXES | REVIEWS | ISSUES #####
+
+1) I get this error during patching when the app is running
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.0.0.141:5000
+Press CTRL+C to quit
+^CTraceback (most recent call last):
+  File "/Users/raymond/my_wardrobe/backend/app.py", line 145, in <module>
+  File "/Users/raymond/my_wardrobe/venv/lib/python3.13/site-packages/flask/sansio/scaffold.py", line 362, in decorator
+    self.add_url_rule(rule, endpoint, f, **options)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raymond/my_wardrobe/venv/lib/python3.13/site-packages/flask/sansio/scaffold.py", line 47, in wrapper_func
+    return f(self, args, *kwargs)
+  File "/Users/raymond/my_wardrobe/venv/lib/python3.13/site-packages/flask/sansio/app.py", line 657, in add_url_rule
+    raise AssertionError(
+    ...<2 lines>...
+    )
+AssertionError: View function mapping is overwriting an existing endpoint function: test_gantt
+## END OF ERROR

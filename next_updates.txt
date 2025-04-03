@@ -1,0 +1,78 @@
+######################
+# UPDATE REQUESTS ####
+verify - Add the features to export|download|upload|'copy to clipboard' buttons to the pages as appropriate for the feature/task
+correction - Update the current/stable feature pages from the dashboard to /feature instead of /test/feature : pages should be 
+ -- http://127.0.0.1:5000/test/editor -> http://127.0.0.1:5000/editor
+ -- http://127.0.0.1:5000/test/gantt -> http://127.0.0.1:5000/gantt
+ -- http://127.0.0.1:5000/test/extended -> http://127.0.0.1:5000/extended
+
+correction - Set the dashboard as the initial page http://127.0.0.1:5000/ and keep the http://127.0.0.1:5000/dashboard
+ - create the reports page and update links * reports page not created
+
+## MENU FIXES
+correction : Unify the menu system accross all the pages.
+
+| Costume Scheduler Dashboard                                                                           |
+| Dashboard Gantt Chart Extended View Inventory Editor Reports(no page/broken) Testing(goes to experimental dashboard)  |
+ 
+-- menu/return/home button is good : http://127.0.0.1:5000/test/editor 
+-- http://127.0.0.1:5000/dashboard# is good
+-- http://127.0.0.1:5000/test/editor is good
+-- missing menu - gantt chart page - http://127.0.0.1:5000/test/gantt : no menu or return option, page should be at http://127.0.0.1:5000/gantt , needs help info usage link
+
+verify/correct - For each page add a help link with overview and usage of the feature
+verify implemented - Clean up project directory keeping the frontend_checkers in the base directory my_wardrobe/ (reference project_expanded_for_cleanup.txt)
+
+## PAGE FIXES
+ incomplete/verify/correct - The http://127.0.0.1:5000/test/extended and http://127.0.0.1:5000/test/gantt pages
+ missing/update - change the time frame from 8am to 12pm * 
+ update - only see '17:00 18:00 19:00 20:00 21:00'
+ misisng - add a time frame selector to zoom in on blocks of time
+ missing - Change the time entry to down to the minute, or a selector to change the task time increment per show
+
+## EXPERIMENTAL DASHBOARD
+complete,modify - update screen fram split from 80|20 to 90|10 : Create an experimental dashboard page with the feature menu on the right 20% side that opens the feature in the rest of the 80% of web page(allow page to scale with window)
+remove feature from web interface -- Create a project git-manager : http://127.0.0.1:5000/test/dashboard
+ - move status to single line at the bottom of frame :  System Status [ Online Frontend Version: v0.4.0 Backend Version: v0.4.0 ]
+ - move to inventory pane [ Inventory Items: 160 ]
+ - move to today's schedule pane [ Scheduled Events: 48 ]
+reference link does not return to the status page : http://127.0.0.1:5000/test/dashboard#:~:text=%F0%9F%93%8A-,Dashboard,-%F0%9F%93%85%20Gantt%20Chart
+
+
+## INVENTORY
+#http://127.0.0.1:5000/test/dashboard - stats show
+Inventory Summary
+Available Items: 105
+In Use: 41
+Cleaning: 8
+In Repair: 6
+
+#while - http://127.0.0.1:5000/ shows
+http://127.0.0.1:5000/
+Inventory Summary
+Manage Inventory
+Men's Formal Wear 1 items
+Women's Period Wear 1 items
+Men's Hats 1 items
+Men's Footwear 1 items
+Women's Outerwear 1 items
+Item Status
+Available 3 items
+In Use 1 items
+Cleaning 1 items
+In Repair 0 items
+
+question : are there seperate databases?
+  -- can this be in the reports page, showing the different database files with a report generator
+
+### PROJECT MANAGEMENT
+verify - Review the patch-management scripts , workflow and recommend ways to simplify the original patching with the current workflow, and a cleanup scheme
+testing - A bash script or python program to convert PDF inventory files from a pdf_imports/ directory to pdf_conversions/ into csv files to update/import items in the inventory
+            - if a data field is missing for an item in pdf chart, fill the column with 'review'
+
+Update check_frontend.sh script with updated urls to test
+Update README.md with full deployment of the last stable version from main
+Update summary.md and fix the formatting
+Update changelog.md with all new completed tasks
+
+create a patcher for these changes

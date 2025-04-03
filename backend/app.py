@@ -54,11 +54,19 @@ def write_data(data):
 # Main routes
 @app.route('/')
 def index():
-    return render_template('dashboard.html')
+    return render_template('dashboard_new.html')
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard_new.html')
 
 @app.route('/legacy')
 def legacy():
     return render_template('index.html')
+
+@app.route('/legacy-dashboard')
+def legacy_dashboard():
+    return render_template('dashboard.html')
 
 # API routes
 @app.route('/api/data')
@@ -100,16 +108,6 @@ def editor():
 def reports():
     return render_template('feature/reports.html')
 
-# Dashboard route (accessible from both / and /dashboard)
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
-
-# Testing routes
-@app.route('/test/dashboard')
-def test_dashboard():
-    return render_template('test/experimental_dashboard.html')
-
 # Legacy test routes (keeping for backward compatibility)
 @app.route('/test/gantt')
 def test_gantt():
@@ -125,6 +123,11 @@ def test_extended():
 def test_editor():
     # Redirect to the new route
     return render_template('feature/wardrobe_editor.html')
+
+@app.route('/test/dashboard')
+def test_dashboard():
+    # Now this just points to the main dashboard
+    return render_template('dashboard_new.html')
 
 if __name__ == "__main__":
     PORT = 5000
