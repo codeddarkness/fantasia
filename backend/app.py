@@ -51,10 +51,16 @@ def write_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=2)
 
+# Main routes
 @app.route('/')
 def index():
+    return render_template('dashboard.html')
+
+@app.route('/legacy')
+def legacy():
     return render_template('index.html')
 
+# API routes
 @app.route('/api/data')
 def api_data():
     return jsonify(read_data())
@@ -77,32 +83,51 @@ def api_upload():
 def api_download():
     return send_file(DATA_FILE, as_attachment=True)
 
+# Feature routes (moved from /test/* to /feature/*)
+@app.route('/gantt')
+def gantt():
+    return render_template('feature/gantt.html')
 
+@app.route('/extended')
+def extended():
+    return render_template('feature/extended_overlap.html')
+
+@app.route('/editor')
+def editor():
+    return render_template('feature/wardrobe_editor.html')
+
+@app.route('/reports')
+def reports():
+    return render_template('feature/reports.html')
+
+# Dashboard route (accessible from both / and /dashboard)
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+# Legacy test routes (keeping for backward compatibility)
 @app.route('/test/gantt')
 def test_gantt():
     return render_template('test/gantt.html')
-
 
 @app.route('/test/extended')
 def test_extended():
     return render_template('test/extended_overlap.html')
 
-
 @app.route('/test/editor')
 def test_editor():
     return render_template('test/wardrobe_editor.html')
 
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard.html')
+@app.route('/test/dashboard')
+def test_dashboard():
+    return render_template('test/experimental_dashboard.html')
 
 if __name__ == "__main__":
     PORT = 5000
 
     print(f"\n🧵 Costume Scheduler – Backend: v{BACKEND_VERSION}, Frontend: v{FRONTEND_VERSION}")
     print(f"🌐 Open in browser: http://127.0.0.1:{PORT}")
-    print("🔒 If you're getting 400/SSL errors, make sure you’re using HTTP, not HTTPS!\n")
+    print("🔒 If you're getting 400/SSL errors, make sure you're using HTTP, not HTTPS!\n")
 
     if check_port(PORT):
         print(f"⚠️ Port {PORT} is already in use.")
@@ -134,19 +159,3 @@ if __name__ == "__main__":
             print(f"🌐 Open in browser: http://127.0.0.1:{PORT}")
 
     app.run(debug=True, host="0.0.0.0", port=PORT, use_reloader=False)
-
-
-# PATCH v0.3.6 routes
-@app.route("/test")
-def test_view(): return render_template("test.html")
-
-@app.route("/legacy-preview")
-def legacy_preview(): return render_template("legacy_gantt_preview.html")
-
-@app.route("/vis-preview")
-def vis_preview(): return render_template("vis_gantt_preview.html")
-
-# Add this to your Flask routes in backend/app.py:
-@app.route('/test/gantt')
-def test_gantt():
-        return render_template('test/gantt.html')
