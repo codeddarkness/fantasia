@@ -1,0 +1,491 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import json
+import uuid
+import logging
+import argparse
+import traceback
+from typing import Dict, Any, List
+from pathlib import Path
+
+# Attempt to import dependencies
+try:
+    import pandas as pd
+    import fitz  # PyMuPDF
+except ImportError as e:
+    print(f"Dependency import error: {e}")
+    print("Please install required packages: pandas, PyMuPDF")
+    sys.exit(1)
+
+def setup_logging(verbose: bool = False) -> logging.Logger:
+    """
+    Configure logging for the script
+    
+    Args:
+    verbose (bool): Enable debug logging
+    
+    Returns:
+    logging.Logger: Configured logger
+    """
+    # Configure logging
+    log_level = logging.DEBUG if verbose else logging.INFO
+    logging.basicConfig(
+        level=log_level,
+        format='%(asctime)s - %(levelname)s: %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    return logging.getLogger(__name__)
+
+def normalize_size(size_input: Any) -> str:
+    """
+    Normalize size to a standard format
+    
+    Args:
+    size_input: Input size value
+    
+    Returns:
+    str or None: Normalized size
+    """
+    if pd.isna(size_input):
+        return None
+    
+    # Convert to string and strip
+    size_str = str(size_input).strip().upper()
+    
+    # Size mapping
+    size_map = {
+        'XS': 'XS', 'S': 'S', 'M': 'M', 'L': 'L', 'XL': 'XL',
+        'XXL': 'XXL', '2XL': '2XL', '3XL': '3XL'
+    }
+    
+    # Check for exact match
+    if size_str in size_map:
+        return size_map[size_str]
+    
+    # Try numeric conversion
+    try:
+        # Convert to integer for shoe/numeric sizes
+        numeric_size = int(float(size_str))
+        return str(numeric_size)
+    except (ValueError, TypeError):
+        # If can't convert, return original (stripped)
+        return size_str if size_str else None
+
+def extract_category(item_name: str) -> str:
+    """
+    Categorize inventory items
+    
+    Args:
+    item_name (str): Name of the item
+    
+    Returns:
+    str: Categorized item type
+    """
+    if pd.isna(item_name):
+        return "Miscellaneous"
+    
+    item_name = str(item_name).lower()
+    
+    categories = {
+        "Men's Formal Wear": ['suit', 'tuxedo', 'jacket', 'blazer', 'coat'],
+        "Women's Period Wear": ['dress', 'gown', 'corset', 'bodice', 'skirt'],
+        "Men's Hats": ['hat', 'cap', 'beanie', 'headwear', 'helmet'],
+        "Men's Footwear": ['boot', 'shoe', 'loafer', 'sneaker', 'socks'],
+        "Women's Outerwear": ['cape', 'coat', 'jacket', 'wrap', 'shawl']
+    }
+    
+    for category, keywords in categories.items():
+        if any(keyword in item_name for keyword in keywords):
+            return category
+    
+    return "Miscellaneous"
+
+def generate_unique_id(prefix: str = 'item') -> str:
+    """
+    Generate a unique identifier
+    
+    Args:
+    prefix (str): Prefix for the ID
+    
+    Returns:
+    str: Unique identifier
+    """
+    return f"{prefix}_{uuid.uuid4().hex[:8]}"
+
+def extract_data_from_pdf(file_path: str, logger: logging.Logger) -> pd.DataFrame:
+    """
+    Extract tabular data from PDF files using PyMuPDF
+    
+    Args:
+    file_path (str): Path to PDF file
+    logger (logging.Logger): Logger instance
+    
+    Returns:
+    pandas.DataFrame: Extracted data
+    """
+    try:
+        # Open the PDF
+        doc = fitz.open(file_path)
+        
+        # Collect all text from pages
+        all_page_texts = []
+        for page in doc:
+            page_text = page.get_text()
+            all_page_texts.append(page_text)
+        
+        # Join all page texts
+        full_text = "\n".join(all_page_texts)
+        
+        # Split into lines, filter out empty lines
+        lines = [line.strip() for line in full_text.split('\n') if line.strip()]
+        
+        # Try to find a meaningful header
+        header_line = None
+        keywords = ['character', 'piece', 'description', 'name', 'size', 'price']
+        for line in lines:
+            if any(keyword in line.lower() for keyword in keywords):
+                header_line = line
+                break
+        
+        # If no header found, use the first non-empty line
+        if not header_line and lines:
+            header_line = lines[0]
+        
+        # Split header into columns
+        if header_line:
+            header_columns = header_line.split()
+            
+            # Extract data rows
+            data_rows = []
+            for line in lines[1:]:
+                parts = line.split()
+                if len(parts) >= len(header_columns):
+                    data_rows.append(parts[:len(header_columns)])
+            
+            # Create DataFrame
+            if data_rows:
+                try:
+                    df = pd.DataFrame(data_rows, columns=header_columns)
+                    return df
+                except Exception as e:
+                    logger.warning(f"DataFrame creation failed: {e}")
+        
+        logger.warning(f"No extractable data found in {file_path}")
+        return pd.DataFrame()
+    
+    except Exception as e:
+        logger.error(f"Error extracting PDF data: {e}")
+        return pd.DataFrame()
+
+def process_data(df: pd.DataFrame, logger: logging.Logger) -> Dict[str, Any]:
+    """
+    Process DataFrame into structured JSON format
+    
+    Args:
+    df (pandas.DataFrame): Input DataFrame
+    logger (logging.Logger): Logger instance
+    
+    Returns:
+    dict: Structured inventory data
+    """
+    # Initialize the base structure
+    inventory_data = {
+        "version": "v0.4.0",
+        "wardrobe_items": [],
+        "categories": []
+    }
+    
+    # Track unique categories
+    unique_categories = set()
+    
+    # Clean and preprocess DataFrame
+    df = df.apply(lambda x: x.astype(str).str.strip() if x.dtype == "object" else x)
+    
+    # Determine column mappings (flexible approach)
+    column_map = {
+        'name': None,
+        'size': None,
+        'status': 'Available',
+        'price': None,
+        'location': None,
+        'condition': 'Unknown',
+        'notes': None
+    }
+    
+    # Try to map columns (case-insensitive)
+    df_columns = [str(col).lower() for col in df.columns]
+    column_mapping = {
+        'name': ['name', 'piece', 'description', 'item', 'character'],
+        'size': ['size', 'head', 'sizing', 'measurement'],
+        'price': ['price', 'cost', 'value', 'replacement'],
+        'location': ['location', 'rack', 'storage', 'place'],
+        'notes': ['notes', 'description', 'comments', 'details']
+    }
+    
+    # Find best column matches
+    for key, potential_matches in column_mapping.items():
+        for match in potential_matches:
+            if match in df_columns:
+                column_index = df_columns.index(match)
+                column_map[key] = df.columns[column_index]
+                break
+    
+    # Process each row
+    for _, row in df.iterrows():
+        try:
+            # Skip completely empty rows
+            if row.isnull().all():
+                continue
+            
+            # Extract item name (required)
+            item_name = (
+                row[column_map['name']] if column_map['name'] and not pd.isna(row[column_map['name']]) 
+                else 'Unknown Item'
+            )
+            
+            # Skip if no item name
+            if pd.isna(item_name):
+                continue
+            
+            # Determine category
+            category = extract_category(item_name)
+            
+            # Add unique category if not exists
+            if category not in unique_categories:
+                unique_categories.add(category)
+                inventory_data['categories'].append({
+                    "id": category.lower().replace(' ', '_'),
+                    "name": category,
+                    "description": f"Inventory items in the {category} category"
+                })
+            
+            # Safe price conversion
+            price = None
+            if column_map['price']:
+                try:
+                    price_str = str(row[column_map['price']]).replace('$', '').replace(',', '')
+                    price = float(price_str) if price_str and price_str.replace('.', '').isdigit() else None
+                except (ValueError, TypeError):
+                    price = None
+            
+            # Create inventory item
+            inventory_item = {
+                "id": generate_unique_id(),
+                "name": str(item_name),
+                "size": normalize_size(
+                    row[column_map['size']] if column_map['size'] and not pd.isna(row[column_map['size']]) else None
+                ),
+                "status": "Available",
+                "category": category,
+                "price": price,
+                "location": str(row[column_map['location']] 
+                    if column_map['location'] and not pd.isna(row[column_map['location']]) 
+                    else None),
+                "condition": "Unknown",
+                "notes": str(row[column_map['notes']] 
+                    if column_map['notes'] and not pd.isna(row[column_map['notes']]) 
+                    else None)
+            }
+            
+            inventory_data['wardrobe_items'].append(inventory_item)
+        
+        except Exception as e:
+            logger.error(f"Error processing row: {e}")
+            logger.debug(f"Problematic row: {row}")
+    
+    return inventory_data
+
+def process_files(input_dir: str, output_dir: str, logger: logging.Logger) -> Dict[str, List[str]]:
+    """
+    Process inventory files from various formats
+    
+    Args:
+    input_dir (str): Directory containing input files
+    output_dir (str): Directory to save output files
+    logger (logging.Logger): Logger instance
+    
+    Returns:
+    dict: Summary of processed files
+    """
+    # Ensure output directory exists
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Track processed files
+    processed_files = {
+        'json': [],
+        'failed': []
+    }
+
+    # Supported file extensions
+    supported_extensions = ['.pdf', '.xlsx', '.xls', '.ods', '.csv']
+
+    # Process inventory files - use Path for better file handling
+    inventory_files = []
+    for ext in supported_extensions:
+        inventory_files.extend(list(Path(input_dir).glob(f'*{ext}')))
+    
+    logger.info(f"Found {len(inventory_files)} supported files in {input_dir}")
+    
+    for input_path in inventory_files:
+        # Convert path to string for compatibility with existing code
+        input_path_str = str(input_path)
+        
+        # Get filename and base filename
+        inventory_file = os.path.basename(input_path_str)
+        base_filename = os.path.splitext(inventory_file)[0]
+
+        try:
+            # Determine file type and read accordingly
+            file_ext = os.path.splitext(inventory_file)[1].lower()
+            
+            # Extract DataFrame based on file type
+            logger.debug(f"Processing {inventory_file} with extension {file_ext}")
+            
+            if file_ext == '.pdf':
+                df = extract_data_from_pdf(input_path_str, logger)
+            elif file_ext in ['.xlsx', '.xls']:
+                # Handle Excel files with more error reporting
+                try:
+                    df = pd.read_excel(input_path_str)
+                    logger.debug(f"Excel file loaded: {inventory_file}, shape: {df.shape}")
+                except Exception as excel_err:
+                    logger.error(f"Excel read error ({inventory_file}): {excel_err}")
+                    raise
+            elif file_ext == '.ods':
+                try:
+                    df = pd.read_excel(input_path_str, engine='odf')
+                    logger.debug(f"ODS file loaded: {inventory_file}, shape: {df.shape}")
+                except Exception as ods_err:
+                    logger.error(f"ODS read error ({inventory_file}): {ods_err}")
+                    raise
+            elif file_ext == '.csv':
+                try:
+                    df = pd.read_csv(input_path_str)
+                    logger.debug(f"CSV file loaded: {inventory_file}, shape: {df.shape}")
+                except Exception as csv_err:
+                    logger.error(f"CSV read error ({inventory_file}): {csv_err}")
+                    raise
+            else:
+                logger.warning(f"Unsupported file type: {inventory_file}")
+                continue
+
+            # Skip empty DataFrames
+            if df.empty:
+                logger.warning(f"No data found in {inventory_file}")
+                processed_files['failed'].append(base_filename)
+                continue
+
+            # Process data
+            inventory_data = process_data(df, logger)
+
+            # Only create output if there are items
+            if inventory_data['wardrobe_items']:
+                # Output JSON file
+                output_path = os.path.join(output_dir, f"{base_filename}.json")
+                with open(output_path, 'w') as f:
+                    json.dump(inventory_data, f, indent=2)
+
+                processed_files['json'].append(base_filename)
+                logger.info(f"Processed {inventory_file} successfully")
+            else:
+                logger.warning(f"No wardrobe items extracted from {inventory_file}")
+                processed_files['failed'].append(base_filename)
+
+        except Exception as e:
+            logger.error(f"Error processing {inventory_file}: {e}")
+            logger.debug(traceback.format_exc())
+            processed_files['failed'].append(base_filename)
+
+    return processed_files
+
+def main():
+    """
+    Main execution function with argument parsing
+    """
+    # Setup argument parser
+    parser = argparse.ArgumentParser(description='Inventory Data Extractor')
+    parser.add_argument(
+        '-i', '--input', 
+        help='Input directory containing inventory files', 
+        default=None,
+        nargs='+'  # Allow multiple input directories
+    )
+    parser.add_argument(
+        '-o', '--output', 
+        help='Output directory for extracted JSON files', 
+        default=None
+    )
+    parser.add_argument(
+        '-v', '--verbose', 
+        action='store_true', 
+        help='Enable verbose logging'
+    )
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Setup logging
+    logger = setup_logging(args.verbose)
+
+    # Determine input directories
+    if args.input:
+        input_dirs = args.input
+    else:
+        # Look for sheets and pdf_imports in parent directory
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        parent_dir = os.path.dirname(current_dir)
+        
+        # Get the absolute path to current directory
+        absolute_path = os.path.abspath(os.path.dirname(__file__))
+        
+        # Potential input directories - look in both parent dir and current dir
+        potential_input_dirs = [
+            os.path.join(parent_dir, 'pdf_imports'),
+            os.path.join(parent_dir, 'sheets'),
+            os.path.join(absolute_path, 'pdf_imports'),
+            os.path.join(absolute_path, 'sheets')
+        ]
+        
+        # Filter out non-existent directories
+        input_dirs = [d for d in potential_input_dirs if os.path.isdir(d)]
+        
+        if not input_dirs:
+            logger.error("No input directories found. Please specify input directory with -i/--input")
+            sys.exit(1)
+
+    # Process each input directory separately
+    for input_dir in input_dirs:
+        # Determine output directory
+        if args.output:
+            output_dir = args.output
+        else:
+            # Determine output based on input directory name
+            if 'pdf_imports' in input_dir:
+                output_dir = os.path.join(os.path.dirname(input_dir), 'pdf_conversions')
+            elif 'sheets' in input_dir:
+                output_dir = os.path.join(os.path.dirname(input_dir), 'sheets_conversions')
+            else:
+                output_dir = os.path.join(os.path.dirname(input_dir), 'json_output')
+
+        # Log which directory is being processed
+        logger.info(f"Processing files in: {input_dir}")
+        logger.info(f"Outputting to: {output_dir}")
+
+        # Process files for this directory
+        processed = process_files(
+            input_dir=input_dir, 
+            output_dir=output_dir, 
+            logger=logger
+        )
+        
+        # Log summary for this directory
+        logger.info(f"Directory {input_dir} processing complete")
+        logger.info(f"  - JSON files generated: {len(processed['json'])}")
+        logger.info(f"  - Failed files: {len(processed['failed'])}")
+        if processed['failed']:
+            logger.debug(f"  - Failed files: {', '.join(processed['failed'])}")
+
+if __name__ == "__main__":
+    main()

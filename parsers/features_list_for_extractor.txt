@@ -1,0 +1,4 @@
+A summary report that consolidates all the processed data
+More advanced file detection based on content rather than just filename
+Additional logging or reporting options
+More sophisticated category detection for inventory items

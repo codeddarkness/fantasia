@@ -8,3 +8,4 @@ dev_archive/
 keeps/
 logs/
 patches_archive/
+*.tar.gz

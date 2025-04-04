@@ -3,3 +3,4 @@ sheets_conversions/*
 pdf_conversions/*
 pdf_imports/*
 venv/
+*.tar.gz
