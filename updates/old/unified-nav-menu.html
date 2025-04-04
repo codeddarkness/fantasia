@@ -1,0 +1,29 @@
+<!-- Navigation Menu Template -->
+<div class="main-nav">
+  <a href="/" id="nav-dashboard">Dashboard</a>
+  <a href="/gantt" id="nav-gantt">Gantt Chart</a>
+  <a href="/extended" id="nav-extended">Extended View</a>
+  <a href="/editor" id="nav-editor">Inventory Editor</a>
+  <a href="/reports" id="nav-reports">Reports</a>
+</div>
+
+<script>
+  // Set active navigation item based on current page
+  document.addEventListener('DOMContentLoaded', function() {
+    // Get current path
+    const path = window.location.pathname;
+    
+    // Set active class for the corresponding nav item
+    if (path === '/' || path === '/dashboard') {
+      document.getElementById('nav-dashboard').classList.add('active');
+    } else if (path === '/gantt' || path === '/test/gantt') {
+      document.getElementById('nav-gantt').classList.add('active');
+    } else if (path === '/extended' || path === '/test/extended') {
+      document.getElementById('nav-extended').classList.add('active');
+    } else if (path === '/editor' || path === '/test/editor') {
+      document.getElementById('nav-editor').classList.add('active');
+    } else if (path === '/reports') {
+      document.getElementById('nav-reports').classList.add('active');
+    }
+  });
+</script>

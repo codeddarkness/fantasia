@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Costume Scheduler - Extended Overlap View</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+    h1, h2 { color: #333; }
+    
+    /* Controls */
+    .controls { margin-bottom: 20px; padding: 10px; background: #f5f5f5; border-radius: 4px; }
+    .controls select, .controls input { padding: 8px; margin-right: 10px; }
+    .controls button { padding: 8px 16px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    
+    /* Help link */
+    .help-link { display: inline-block; margin-left: 10px; color: #4CAF50; text-decoration: none; font-size: 14px; }
+    .help-content { display: none; background-color: #f9f9f9; padding: 15px; border-radius: 4px; margin: 10px 0; border-left: 4px solid #4CAF50; }
+    
+    /* Navigation */
+    .main-nav { background-color: #444; display: flex; padding: 10px 20px; margin-bottom: 20px; }
+    .main-nav a { color: white; text-decoration: none; padding: 10px 15px; margin-right: 5px; border-radius: 4px; }
+    .main-nav a:hover, .main-nav a.active { background-color: #555; }
+    
+    /* Dresser sections */
+    .dresser-section { 
+      margin-bottom: 30px; 
+      border: 1px solid #ddd; 
+      border-radius: 4px; 
+      overflow: hidden;
+    }
+    
+    .dresser-header { 
+      background: #f5f5f5; 
+      padding: 10px; 
+      font-weight: bold; 
+      border-bottom: 1px solid #ddd;
+    }
+    
+    /* Timeline */
+    .timeline-container {
+      position: relative;
+      height: 120px;
+      padding: 10px 0;
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+    
+    .hour-markers {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 20px;
+      display: flex;
+    }
+    
+    .hour-marker {
+      position: relative;
+      width: 60px;
+      flex-grow: 1;
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .hour-marker:after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      height: 100px;
+      width: 1px;
+      background: #eee;
+    }
+    
+    .timeline-event {
+      position: absolute;
+      top: 30px;
+      height: 40px;
+      background: #4CAF50;
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 5px;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 1;
+    }
+    
+    .timeline-event.overlap {
+      background: #f44336;
+    }
+    
+    /* Detail view */
+    .detail-section {
+      padding: 15px;
+    }
+    
+    .schedule-item {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .schedule-item.overlap {
+      border-left: 4px solid #f44336;
+    }
+    
+    .schedule-time {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .schedule-actor {
+      flex: 1;
+    }
+    
+    .schedule-duration {
+      color: #666;
+    }
+    
+    .schedule-notes {
+      grid-column: span 3;
+      font-style: italic;
+      margin-top: 5px;
+      color: #666;
+    }
+    
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 4px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+    }
+    
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      border-radius: 4px;
+    }
+    
+    .normal { background: #4CAF50; }
+    .conflict { background: #f44336; }
+    
+    /* Export buttons */
+    .export-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .export-button {
+      padding: 8px 16px;
+      background: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Extended Costume Change Schedule</h1>
+  </header>
+  
+  <div class="main-nav">
+    <a href="/">Dashboard</a>
+    <a href="/gantt">Gantt Chart</a>
+    <a href="/extended" class="active">Extended View</a>
+    <a href="/editor">Inventory Editor</a>
+    <a href="/reports">Reports</a>
+  </div>
+  
+  <div class="controls">
+    <label for="date-selector">Select date:</label>
+    <input type="date" id="date-selector">
+    
+    <label for="time-range">Time range:</label>
+    <select id="time-range">
+      <option value="all">Full day (8am-12pm)</option>
+      <option value="morning">Morning (8am-12pm)</option>
+      <option value="afternoon">Afternoon (12pm-4pm)</option>
+      <option value="evening">Evening (4pm-8pm)</option>
+      <option value="night">Night (8pm-12am)</option>
+    </select>
+    
+    <label for="time-increment">Time increment:</label>
+    <select id="time-increment">
+      <option value="5">5 minutes</option>
+      <option value="10">10 minutes</option>
+      <option value="15">15 minutes</option>
+      <option value="30">30 minutes</option>
+      <option value="60">60 minutes</option>
+    </select>
+    
+    <button id="refresh-btn">Refresh</button>
+    <a href="#" class="help-link" onclick="toggleHelp(); return false;">Help</a>
+  </div>
+  
+  <div class="help-content" id="help-content">
+    <h3>Extended View Help</h3>
+    <p>This view shows the costume change schedule with overlap detection to help identify potential scheduling conflicts.</p>
+    <ul>
+      <li><strong>Time Range:</strong> Select a specific time range to focus on a part of the day.</li>
+      <li><strong>Time Increment:</strong> Adjust the granularity of the timeline display.</li>
+      <li><strong>Legend:</strong> Green events have no conflicts. Red events indicate a scheduling overlap where the same dresser is assigned to multiple actors at the same time.</li>
+      <li><strong>Timeline:</strong> Visual representation of the schedule with color-coded events.</li>
+      <li><strong>Details:</strong> Comprehensive list of all scheduled costume changes.</li>
+    </ul>
+    <p>Use this view to identify and resolve scheduling conflicts before they occur during your production.</p>
+  </div>
+  
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-color normal"></div>
+      <span>Normal Schedule</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-color conflict"></div>
+      <span>Scheduling Conflict</span>
+    </div>
+  </div>
+  
+  <div id="schedule-container">
+    <!-- Schedule content will be added here -->
+  </div>
+  
+  <div class="export-buttons">
+    <button id="export-csv-btn" class="export-button">Export as CSV</button>
+    <button id="copy-btn" class="export-button">Copy to Clipboard</button>
+  </div>
+  
+  <script>
+    // Global data
+    let scheduleData = null;
+    let timeRanges = {
+      'all': { start: 8, end: 24 },
+      'morning': { start: 8, end: 12 },
+      'afternoon': { start: 12, end: 16 },
+      'evening': { start: 16, end: 20 },
+      'night': { start: 20, end: 24 }
+    };
+    
+    // Toggle help content visibility
+    function toggleHelp() {
+      const helpContent = document.getElementById('help-content');
+      helpContent.style.display = helpContent.style.display === 'block' ? 'none' : 'block';
+    }
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set date to today
+      const dateSelector = document.getElementById('date-selector');
+      const today = new Date().toISOString().split('T')[0];
+      dateSelector.value = today;
+      
+      // Set up refresh button
+      document.getElementById('refresh-btn').addEventListener('click', fetchData);
+      
+      // Set up export buttons
+      document.getElementById('export-csv-btn').addEventListener('click', exportCSV);
+      document.getElementById('copy-btn').addEventListener('click', copyToClipboard);
+      
+      // Set up time range and increment change handlers
+      document.getElementById('time-range').addEventListener('change', refreshView);
+      document.getElementById('time-increment').addEventListener('change', refreshView);
+      
+      // Initial fetch
+      fetchData();
+    });
+    
+    // Fetch data from API
+    function fetchData() {
+      const date = document.getElementById('date-selector').value;
+      
+      fetch('/api/data')
+        .then(response => response.json())
+        .then(data => {
+          scheduleData = data;
+          refreshView();
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+    
+    // Check if two time ranges overlap
+    function checkOverlap(start1, duration1, start2, duration2) {
+      const s1 = new Date(start1).getTime();
+      const e1 = s1 + (duration1 * 60 * 1000);
+      const s2 = new Date(start2).getTime();
+      const e2 = s2 + (duration2 * 60 * 1000);
+      
+      return (s1 < e2 && s2 < e1);
+    }
+    
+    // Refresh view based on current settings
+    function refreshView() {
+      if (!scheduleData) return;
+      
+      const date = document.getElementById('date-selector').value;
+      const timeRangeKey = document.getElementById('time-range').value;
+      const timeIncrement = parseInt(document.getElementById('time-increment').value);
+      
+      const { start: startHour, end: endHour } = timeRanges[timeRangeKey];
+      
+      renderSchedule(scheduleData, date, startHour, endHour, timeIncrement);
+    }
+    
+    // Render schedule
+    function renderSchedule(data, date, startHour, endHour, timeIncrement) {
+      const container = document.getElementById('schedule-container');
+      container.innerHTML = '';
+      
+      const schedules = data.schedules || [];
+      const filtered = schedules.filter(entry => entry.time.startsWith(date));
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<p>No schedule entries found for the selected date.</p>';
+        return;
+      }
+      
+      // Filter by time range
+      const startTime = new Date(`${date}T${startHour.toString().padStart(2, '0')}:00:00`);
+      const endTime = new Date(`${date}T${endHour.toString().padStart(2, '0')}:00:00`);
+      
+      const timeRangeFiltered = filtered.filter(entry => {
+        const entryTime = new Date(entry.time);
+        return entryTime >= startTime && entryTime <= endTime;
+      });
+      
+      if (timeRangeFiltered.length === 0) {
+        container.innerHTML = '<p>No schedule entries found for the selected time range.</p>';
+        return;
+      }
+      
+      // Group by dresser
+      const dressers = {};
+      timeRangeFiltered.forEach(entry => {
+        if (!dressers[entry.dresser]) {
+          dressers[entry.dresser] = [];
+        }
+        dressers[entry.dresser].push(entry);
+      });
+      
+      // Process each dresser's schedule
+      Object.keys(dressers).forEach(dresserName => {
+        const dresserEntries = dressers[dresserName];
+        
+        // Mark overlapping entries
+        for (let i = 0; i < dresserEntries.length; i++) {
+          dresserEntries[i].hasOverlap = false;
+          for (let j = 0; j < dresserEntries.length; j++) {
+            if (i !== j && checkOverlap(
+              dresserEntries[i].time, dresserEntries[i].duration_minutes,
+              dresserEntries[j].time, dresserEntries[j].duration_minutes
+            )) {
+              dresserEntries[i].hasOverlap = true;
+              break;
+            }
+          }
+        }
+        
+        // Create section
+        const section = document.createElement('div');
+        section.className = 'dresser-section';
+        
+        // Add header
+        const header = document.createElement('div');
+        header.className = 'dresser-header';
+        header.textContent = `Dresser: ${dresserName}`;
+        section.appendChild(header);
+        
+        // Create timeline
+        const timelineContainer = document.createElement('div');
+        timelineContainer.className = 'timeline-container';
+        
+        // Add hour markers
+        const hourMarkers = document.createElement('div');
+        hourMarkers.className = 'hour-markers';
+        
+        for (let hour = startHour; hour <= endHour; hour++) {
+          const marker = document.createElement('div');
+          marker.className = 'hour-marker';
+          marker.textContent = `${hour}:00`;
+          hourMarkers.appendChild(marker);
+        }
+        
+        timelineContainer.appendChild(hourMarkers);
+        
+        // Calculate timeline dimensions based on time increment
+        const timelineDuration = (endHour - startHour) * 60; // minutes
+        const minutesPerPixel = timeIncrement / 10; // 10px per increment
+        const timelineWidth = timelineDuration / minutesPerPixel;
+        timelineContainer.style.width = `${timelineWidth}px`;
+        
+        // Add events to timeline
+        dresserEntries.forEach(entry => {
+          const entryTime = new Date(entry.time);
+          const entryHour = entryTime.getHours();
+          const entryMinute = entryTime.getMinutes();
+          
+          // Skip entries outside the time range
+          if (entryHour < startHour || entryHour > endHour) return;
+          
+          // Calculate position and width
+          const minutesFromStart = (entryHour - startHour) * 60 + entryMinute;
+          const left = minutesFromStart / minutesPerPixel;
+          const width = entry.duration_minutes / minutesPerPixel;
+          
+          const event = document.createElement('div');
+          event.className = 'timeline-event' + (entry.hasOverlap ? ' overlap' : '');
+          event.style.left = `${left}px`;
+          event.style.width = `${width}px`;
+          event.textContent = `${entry.actor} - ${entry.item}`;
+          event.title = `${entry.actor} - ${entry.item} (${entry.duration_minutes} min)`;
+          
+          timelineContainer.appendChild(event);
+        });
+        
+        section.appendChild(timelineContainer);
+        
+        // Create detail section
+        const detailSection = document.createElement('div');
+        detailSection.className = 'detail-section';
+        
+        // Sort entries by time
+        dresserEntries.sort((a, b) => new Date(a.time) - new Date(b.time));
+        
+        // Add detail items
+        dresserEntries.forEach(entry => {
+          const entryTime = new Date(entry.time);
+          const formattedTime = entryTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          const item = document.createElement('div');
+          item.className = 'schedule-item' + (entry.hasOverlap ? ' overlap' : '');
+          
+          // Create item content
+          item.innerHTML = `
+            <div class="schedule-time">${formattedTime}</div>
+            <div class="schedule-actor">${entry.actor} - ${entry.item}</div>
+            <div class="schedule-duration">${entry.duration_minutes} min</div>
+          `;
+          
+          detailSection.appendChild(item);
+        });
+        
+        section.appendChild(detailSection);
+        container.appendChild(section);
+      });
+    }
+    
+    // Export schedule as CSV
+    function exportCSV() {
+      if (!scheduleData) return;
+      
+      const date = document.getElementById('date-selector').value;
+      const timeRangeKey = document.getElementById('time-range').value;
+      const { start: startHour, end: endHour } = timeRanges[timeRangeKey];
+      
+      const schedules = scheduleData.schedules || [];
+      const filtered = schedules.filter(entry => entry.time.startsWith(date));
+      
+      // Filter by time range
+      const startTime = new Date(`${date}T${startHour.toString().padStart(2, '0')}:00:00`);
+      const endTime = new Date(`${date}T${endHour.toString().padStart(2, '0')}:00:00`);
+      
+      const timeRangeFiltered = filtered.filter(entry => {
+        const entryTime = new Date(entry.time);
+        return entryTime >= startTime && entryTime <= endTime;
+      });
+      
+      if (timeRangeFiltered.length === 0) {
+        alert('No data to export');
+        return;
+      }
+      
+      // Create CSV content
+      let csv = 'Date,Time,Actor,Item,Dresser,Duration,Has Overlap\n';
+      
+      timeRangeFiltered.forEach(entry => {
+        const time = new Date(entry.time);
+        const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        // Check for overlaps
+        let hasOverlap = false;
+        for (const otherEntry of timeRangeFiltered) {
+          if (entry !== otherEntry && entry.dresser === otherEntry.dresser && 
+              checkOverlap(entry.time, entry.duration_minutes, otherEntry.time, otherEntry.duration_minutes)) {
+            hasOverlap = true;
+            break;
+          }
+        }
+        
+        csv += `${date},${formattedTime},${entry.actor},"${entry.item}",${entry.dresser},${entry.duration_minutes},${hasOverlap}\n`;
+      });
+      
+      // Create download link
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `costume_schedule_${date}_${timeRangeKey}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+    
+    // Copy schedule data to clipboard
+    function copyToClipboard() {
+      if (!scheduleData) return;
+      
+      const date = document.getElementById('date-selector').value;
+      const timeRangeKey = document.getElementById('time-range').value;
+      const { start: startHour, end: endHour } = timeRanges[timeRangeKey];
+      
+      const schedules = scheduleData.schedules || [];
+      const filtered = schedules.filter(entry => entry.time.startsWith(date));
+      
+      // Filter by time range
+      const startTime = new Date(`${date}T${startHour.toString().padStart(2, '0')}:00:00`);
+      const endTime = new Date(`${date}T${endHour.toString().padStart(2, '0')}:00:00`);
+      
+      const timeRangeFiltered = filtered.filter(entry => {
+        const entryTime = new Date(entry.time);
+        return entryTime >= startTime && entryTime <= endTime;
+      });
+      
+      if (timeRangeFiltered.length === 0) {
+        alert('No data to copy');
+        return;
+      }
+      
+      // Create text content
+      let text = `Costume Schedule for ${date} (${timeRangeKey})\n\n`;
+      
+      // Group by dresser
+      const dressers = {};
+      timeRangeFiltered.forEach(entry => {
+        if (!dressers[entry.dresser]) {
+          dressers[entry.dresser] = [];
+        }
+        dressers[entry.dresser].push(entry);
+      });
+      
+      Object.keys(dressers).forEach(dresserName => {
+        text += `Dresser: ${dresserName}\n`;
+        
+        // Sort entries by time
+        const entries = dressers[dresserName].sort((a, b) => new Date(a.time) - new Date(b.time));
+        
+        entries.forEach(entry => {
+          const time = new Date(entry.time);
+          const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          
+          // Check for overlaps
+          let hasOverlap = false;
+          for (const otherEntry of entries) {
+            if (entry !== otherEntry && 
+                checkOverlap(entry.time, entry.duration_minutes, otherEntry.time, otherEntry.duration_minutes)) {
+              hasOverlap = true;
+              break;
+            }
+          }
+          
+          text += `  ${formattedTime} - ${entry.actor} - ${entry.item} (${entry.duration_minutes} min)`;
+          if (hasOverlap) text += ' [CONFLICT]';
+          text += '\n';
+        });
+        
+        text += '\n';
+      });
+      
+      // Copy to clipboard
+      navigator.clipboard.writeText(text)
+        .then(() => alert('Schedule copied to clipboard'))
+        .catch(err => console.error('Error copying to clipboard:', err));
+    }
+  </script>
+</body>
+</html>

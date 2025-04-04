@@ -1,9 +1,12 @@
-// Responsive Menu Detection
+// Responsive Menu Detection with iframe protection
 (function() {
   function detectIframe() {
+    // Check if we're in an iframe
     if (window.self !== window.top) {
-      // We're in an iframe, hide navigation
-      const navElements = document.querySelectorAll('.main-nav, nav, header');
+      console.log("Detected running in iframe - hiding navigation");
+      
+      // Hide all navigation elements
+      const navElements = document.querySelectorAll('.nav-menu, .main-nav, nav, header');
       navElements.forEach(el => {
         if (el) el.style.display = 'none';
       });
@@ -13,6 +16,8 @@
       
       // Add class to body for iframe-specific styling
       document.body.classList.add('in-iframe');
+    } else {
+      console.log("Running as main window - showing navigation");
     }
   }
   

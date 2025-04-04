@@ -1,0 +1,23 @@
+I've created a comprehensive theater production schedule for "Metamorphosis" that includes:
+
+90-Item Wardrobe Inventory: Categorized by period wear, accessories, footwear, wigs, special effects, props, and makeup.
+Detailed Schedule: Over 30 costume changes with specific timing, durations, and accessory requirements.
+Dresser Rotation System:
+
+Natalie Chen (Head Dresser) focuses primarily on lead actors and special effects
+Thomas Edwards handles male cast members
+Kimberly Jackson manages female supporting cast
+All three collaborate for complex transformation sequences
+
+
+Special Considerations:
+
+Two major transformation sequences requiring all three dressers
+Strategic quick-change stations positioned around the theater
+Detailed preparation tasks for each dresser
+
+
+Quick Change Locations: Four dedicated areas around the theater to facilitate smooth transitions between scenes.
+
+The schedule demonstrates a carefully choreographed system where the three dressers efficiently manage costume changes for all ten actors throughout the performance, with special attention to the lead actors who have the most complex and frequent changes.
+To use this file, you can save both parts as a single JSON file and import it into your Costume Scheduler application. This will populate your system with a realistic and challenging scheduling scenario that tests all aspects of the application.

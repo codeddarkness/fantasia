@@ -1,3 +1,4 @@
+<!-- PATCH-PATH: frontend/templates/dashboard_new.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -228,16 +229,13 @@
   </div>
   
   <div class="status-bar">
-    <div class="status-indicator" id="status-indicator">System Status: Online</div>
-    <div class="version-info" id="version-info">Frontend Version: v0.5.0 | Backend Version: v0.5.0</div>
+    <div class="status-indicator">System Status: Online</div>
+    <div class="version-info" id="version-info">Loading version info...</div>
   </div>
   
   <script>
     // Load content into the iframe or content area
     function loadContent(button) {
-      const statusIndicator = document.getElementById('status-indicator');
-      statusIndicator.textContent = "System Status: Loading...";
-      
       // Remove active class from all buttons
       const buttons = document.querySelectorAll('.feature-button');
       buttons.forEach(btn => btn.classList.remove('active'));
@@ -258,10 +256,7 @@
       if (url === '/') {
         if (contentArea.querySelector('iframe')) {
           contentArea.removeChild(contentArea.querySelector('iframe'));
-          const welcomeContent = document.createElement('div');
-          welcomeContent.className = 'welcome-content';
-          welcomeContent.innerHTML = document.querySelector('.welcome-content').innerHTML;
-          contentArea.appendChild(welcomeContent);
+          contentArea.appendChild(document.querySelector('.welcome-content'));
         }
         // Refresh dashboard data
         fetchDashboardData();
@@ -273,28 +268,30 @@
       const iframe = document.createElement('iframe');
       iframe.src = url;
       iframe.title = button.getAttribute('data-title');
-      iframe.onload = function() {
-        statusIndicator.textContent = "System Status: Online";
-      };
+      
+      // Add event listener to handle iframe load
+      iframe.addEventListener('load', function() {
+        // Add a class to the iframe content body to indicate it's in an iframe
+        try {
+          iframe.contentDocument.body.classList.add('in-iframe');
+        } catch (e) {
+          // Ignore cross-origin errors
+        }
+      });
       
       contentArea.appendChild(iframe);
     }
     
     // Fetch dashboard data
     function fetchDashboardData() {
-      const statusIndicator = document.getElementById('status-indicator');
-      statusIndicator.textContent = "System Status: Loading Data...";
-      
       fetch('/api/data')
         .then(response => response.json())
         .then(data => {
           updateDashboardCards(data);
           updateVersionInfo(data.version);
-          statusIndicator.textContent = "System Status: Online";
         })
         .catch(error => {
           console.error('Error fetching data:', error);
-          statusIndicator.textContent = "System Status: Error Loading Data";
         });
     }
     
@@ -394,15 +391,19 @@
     // Update version info
     function updateVersionInfo(version) {
       const versionInfo = document.getElementById('version-info');
-      if (version) {
-        versionInfo.textContent = `Frontend Version: ${version} | Backend Version: ${version}`;
-      } else {
-        versionInfo.textContent = `Frontend Version: v0.5.0 | Backend Version: v0.5.0`;
-      }
+      versionInfo.textContent = `Frontend Version: ${version} | Backend Version: ${version}`;
     }
     
     // Initialize the dashboard
     document.addEventListener('DOMContentLoaded', function() {
+      // Save the welcome content for later use
+      const welcomeContent = document.querySelector('.welcome-content');
+      welcomeContent.setAttribute('data-original', welcomeContent.outerHTML);
+      
+      // Set the active button
+      const dashboardButton = document.querySelector('[data-url="/"]');
+      dashboardButton.classList.add('active');
+      
       // Add tooltips to buttons
       const buttons = document.querySelectorAll('.feature-button');
       buttons.forEach(button => {

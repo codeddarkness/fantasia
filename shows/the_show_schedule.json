@@ -1,0 +1,589 @@
+{
+  "version": "v0.5.0",
+  "production_details": {
+    "title": "Metamorphosis",
+    "director": "Sophia Chen",
+    "costume_designer": "Marcus Wright",
+    "head_of_wardrobe": "Olivia Johnson",
+    "performance_date": "2025-04-10",
+    "venue": "Riverside Theater",
+    "runtime": "2 hours 30 minutes",
+    "acts": [
+      {"number": 1, "duration": "45 minutes", "interval": false},
+      {"number": 2, "duration": "50 minutes", "interval": true, "interval_length": "20 minutes"},
+      {"number": 3, "duration": "35 minutes", "interval": false}
+    ]
+  },
+  "agents": {
+    "actors": [
+      "Julia Chen (Lead)",
+      "Marcus Reynolds (Lead)",
+      "Sophia Lee",
+      "Daniel Harrison",
+      "Olivia Wilson",
+      "James Rodriguez",
+      "Emma Parker",
+      "Michael Thompson",
+      "Isabella Sanchez",
+      "Robert Jackson"
+    ],
+    "dressers": [
+      "Natalie Chen (Head Dresser)",
+      "Thomas Edwards",
+      "Kimberly Jackson"
+    ],
+    "managers": [
+      "Victoria Adams (Production Manager)",
+      "Alexander Wright (Stage Manager)"
+    ]
+  },
+  "wardrobe_items": [
+    {"id": "suit001", "name": "Gray Victorian Suit", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A1", "condition": "Excellent", "price": 250, "notes": "Act 1 opening scene"},
+    {"id": "dress001", "name": "Burgundy Ball Gown", "category": "Period Wear", "size": "S", "status": "Ready", "location": "Rack A1", "condition": "Excellent", "price": 350, "notes": "Act 1 ballroom scene"},
+    {"id": "suit002", "name": "Black Tailcoat", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A1", "condition": "Good", "price": 220, "notes": "Act 1 ballroom scene"},
+    {"id": "dress002", "name": "Light Blue Day Dress", "category": "Period Wear", "size": "XS", "status": "Ready", "location": "Rack A1", "condition": "Excellent", "price": 180, "notes": "Act 1 garden scene"},
+    {"id": "suit003", "name": "Brown Tweed Suit", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A1", "condition": "Good", "price": 190, "notes": "Act 1 library scene"},
+    {"id": "dress003", "name": "Emerald Evening Gown", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A1", "condition": "Excellent", "price": 320, "notes": "Act 1 dinner scene"},
+    {"id": "suit004", "name": "Navy Military Uniform", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A2", "condition": "Excellent", "price": 275, "notes": "Act 1 finale"},
+    {"id": "dress004", "name": "Lavender Tea Gown", "category": "Period Wear", "size": "S", "status": "Ready", "location": "Rack A2", "condition": "Good", "price": 210, "notes": "Act 2 opening scene"},
+    {"id": "suit005", "name": "Charcoal Morning Coat", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A2", "condition": "Good", "price": 240, "notes": "Act 2 breakfast scene"},
+    {"id": "dress005", "name": "Cream Walking Dress", "category": "Period Wear", "size": "XS", "status": "Ready", "location": "Rack A2", "condition": "Excellent", "price": 195, "notes": "Act 2 park scene"},
+    
+    {"id": "acc001", "name": "Black Top Hat", "category": "Accessories", "size": "M", "status": "Ready", "location": "Hat Shelf 1", "condition": "Excellent", "price": 45, "notes": "For suits 001, 002"},
+    {"id": "acc002", "name": "Pearl Necklace", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 1", "condition": "Excellent", "price": 60, "notes": "For dresses 001, 003"},
+    {"id": "acc003", "name": "White Gloves", "category": "Accessories", "size": "S", "status": "Ready", "location": "Accessory Drawer 1", "condition": "Excellent", "price": 25, "notes": "For female cast members"},
+    {"id": "acc004", "name": "Leather Gloves", "category": "Accessories", "size": "M", "status": "Ready", "location": "Accessory Drawer 1", "condition": "Good", "price": 30, "notes": "For male cast members"},
+    {"id": "acc005", "name": "Feather Fan", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 2", "condition": "Good", "price": 35, "notes": "For dress001"},
+    {"id": "acc006", "name": "Pocket Watch", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 1", "condition": "Excellent", "price": 40, "notes": "For suits 001, 002, 003"},
+    {"id": "acc007", "name": "Pearl Earrings", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 1", "condition": "Excellent", "price": 45, "notes": "For dresses 001, 003, 006"},
+    {"id": "acc008", "name": "Military Medals", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 2", "condition": "Excellent", "price": 55, "notes": "For suit004"},
+    {"id": "acc009", "name": "Lace Parasol", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Prop Shelf 1", "condition": "Good", "price": 38, "notes": "For dress002, dress005"},
+    {"id": "acc010", "name": "Walking Cane", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Prop Shelf 1", "condition": "Excellent", "price": 42, "notes": "For suit003, suit005"},
+    
+    {"id": "shoes001", "name": "Black Oxford Shoes", "category": "Footwear", "size": "41", "status": "Ready", "location": "Shoe Rack 1", "condition": "Good", "price": 85, "notes": "For male cast members"},
+    {"id": "shoes002", "name": "White Satin Heels", "category": "Footwear", "size": "38", "status": "Ready", "location": "Shoe Rack 1", "condition": "Excellent", "price": 95, "notes": "For dress001, dress003"},
+    {"id": "shoes003", "name": "Brown Leather Boots", "category": "Footwear", "size": "43", "status": "Ready", "location": "Shoe Rack 1", "condition": "Good", "price": 110, "notes": "For suit003, suit008"},
+    {"id": "shoes004", "name": "Black Ankle Boots", "category": "Footwear", "size": "37", "status": "Ready", "location": "Shoe Rack 1", "condition": "Good", "price": 90, "notes": "For dress002, dress005"},
+    {"id": "shoes005", "name": "Military Boots", "category": "Footwear", "size": "42", "status": "Ready", "location": "Shoe Rack 2", "condition": "Excellent", "price": 120, "notes": "For suit004, suit009"},
+    
+    {"id": "wig001", "name": "Blonde Updo Wig", "category": "Wigs", "size": "M", "status": "Ready", "location": "Wig Stand 1", "condition": "Excellent", "price": 175, "notes": "For Julia Chen"},
+    {"id": "wig002", "name": "Brown Curly Wig", "category": "Wigs", "size": "S", "status": "Ready", "location": "Wig Stand 1", "condition": "Good", "price": 160, "notes": "For Sophia Lee"},
+    {"id": "wig003", "name": "Gray Gentleman's Wig", "category": "Wigs", "size": "L", "status": "Ready", "location": "Wig Stand 2", "condition": "Excellent", "price": 180, "notes": "For Daniel Harrison"},
+    {"id": "wig004", "name": "Red Long Wavy Wig", "category": "Wigs", "size": "M", "status": "Ready", "location": "Wig Stand 2", "condition": "Excellent", "price": 185, "notes": "For Emma Parker"},
+    {"id": "wig005", "name": "Black Short Wig", "category": "Wigs", "size": "M", "status": "Ready", "location": "Wig Stand 3", "condition": "Good", "price": 150, "notes": "For Isabella Sanchez"},
+    
+    {"id": "suit006", "name": "White Summer Suit", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A3", "condition": "Excellent", "price": 230, "notes": "Act 2 garden scene"},
+    {"id": "dress006", "name": "Pink Silk Gown", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A3", "condition": "Excellent", "price": 290, "notes": "Act 2 tea scene"},
+    {"id": "suit007", "name": "Burgundy Velvet Jacket", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A3", "condition": "Good", "price": 210, "notes": "Act 2 study scene"},
+    {"id": "dress007", "name": "Gold Evening Dress", "category": "Period Wear", "size": "S", "status": "Ready", "location": "Rack A3", "condition": "Excellent", "price": 310, "notes": "Act 2 dinner scene"},
+    {"id": "suit008", "name": "Hunter Green Coat", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A3", "condition": "Good", "price": 200, "notes": "Act 2 hunting scene"},
+    {"id": "dress008", "name": "Navy Blue Dress", "category": "Period Wear", "size": "XS", "status": "Ready", "location": "Rack A4", "condition": "Good", "price": 190, "notes": "Act 2 travel scene"},
+    {"id": "suit009", "name": "Red Military Uniform", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A4", "condition": "Excellent", "price": 285, "notes": "Act 2 finale"},
+    {"id": "dress009", "name": "Black Mourning Dress", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A4", "condition": "Excellent", "price": 220, "notes": "Act 3 opening scene"},
+    {"id": "suit010", "name": "Gray Morning Suit", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A4", "condition": "Good", "price": 195, "notes": "Act 3 funeral scene"},
+    
+    {"id": "acc011", "name": "Diamond Tiara", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 2", "condition": "Excellent", "price": 120, "notes": "For dress007"},
+    {"id": "acc012", "name": "Gold Pocket Watch", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 2", "condition": "Excellent", "price": 65, "notes": "For suit006, suit007"},
+    {"id": "acc013", "name": "Ruby Brooch", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 2", "condition": "Excellent", "price": 70, "notes": "For dress006, dress007"},
+    {"id": "acc014", "name": "Hunting Cap", "category": "Accessories", "size": "M", "status": "Ready", "location": "Hat Shelf 2", "condition": "Good", "price": 40, "notes": "For suit008"},
+    {"id": "acc015", "name": "Military Hat", "category": "Accessories", "size": "L", "status": "Ready", "location": "Hat Shelf 2", "condition": "Excellent", "price": 55, "notes": "For suit009"},
+    {"id": "acc016", "name": "Black Veil", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 3", "condition": "Excellent", "price": 30, "notes": "For dress009"},
+    {"id": "acc017", "name": "Mourning Brooch", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 2", "condition": "Good", "price": 45, "notes": "For dress009"},
+    {"id": "acc018", "name": "White Cravat", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 3", "condition": "Excellent", "price": 25, "notes": "For suit010"},
+    {"id": "acc019", "name": "Silver Watch Chain", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 2", "condition": "Good", "price": 35, "notes": "For suit005, suit010"},
+    {"id": "acc020", "name": "Lace Fan", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 3", "condition": "Good", "price": 28, "notes": "For dress006, dress007"},
+    
+    {"id": "dress010", "name": "White Wedding Gown", "category": "Period Wear", "size": "S", "status": "Ready", "location": "Rack A4", "condition": "Excellent", "price": 450, "notes": "Act 3 wedding scene"},
+    {"id": "suit011", "name": "Black Wedding Suit", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A5", "condition": "Excellent", "price": 280, "notes": "Act 3 wedding scene"},
+    {"id": "dress011", "name": "Pale Yellow Dress", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A5", "condition": "Good", "price": 175, "notes": "Act 3 garden scene"},
+    {"id": "suit012", "name": "Beige Linen Suit", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A5", "condition": "Good", "price": 165, "notes": "Act 3 garden scene"},
+    {"id": "dress012", "name": "Silver Evening Gown", "category": "Period Wear", "size": "S", "status": "Ready", "location": "Rack A5", "condition": "Excellent", "price": 295, "notes": "Act 3 celebration scene"},
+    {"id": "suit013", "name": "Purple Velvet Jacket", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A5", "condition": "Excellent", "price": 225, "notes": "Act 3 celebration scene"},
+    {"id": "dress013", "name": "Forest Green Dress", "category": "Period Wear", "size": "XS", "status": "Ready", "location": "Rack A5", "condition": "Good", "price": 185, "notes": "Act 3 travel scene"},
+    {"id": "suit014", "name": "Ivory Dinner Jacket", "category": "Period Wear", "size": "L", "status": "Ready", "location": "Rack A6", "condition": "Excellent", "price": 260, "notes": "Act 3 dinner scene"},
+    {"id": "dress014", "name": "Red Ball Gown", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A6", "condition": "Excellent", "price": 340, "notes": "Act 3 final scene"},
+    {"id": "suit015", "name": "White Tie Formal Suit", "category": "Period Wear", "size": "M", "status": "Ready", "location": "Rack A6", "condition": "Excellent", "price": 310, "notes": "Act 3 final scene"},
+    
+    {"id": "acc021", "name": "Wedding Veil", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 4", "condition": "Excellent", "price": 95, "notes": "For dress010"},
+    {"id": "acc022", "name": "Flower Crown", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Accessory Drawer 4", "condition": "Good", "price": 40, "notes": "For dress011"},
+    {"id": "acc023", "name": "Pearl Choker", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 3", "condition": "Excellent", "price": 75, "notes": "For dress012, dress014"},
+    {"id": "acc024", "name": "Diamond Cufflinks", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 3", "condition": "Excellent", "price": 85, "notes": "For suit011, suit015"},
+    {"id": "acc025", "name": "Silver Tie Pin", "category": "Accessories", "size": "One Size", "status": "Ready", "location": "Jewelry Box 3", "condition": "Good", "price": 35, "notes": "For suit013, suit014"},
+    
+    {"id": "shoes006", "name": "White Wedding Shoes", "category": "Footwear", "size": "38", "status": "Ready", "location": "Shoe Rack 2", "condition": "Excellent", "price": 125, "notes": "For dress010"},
+    {"id": "shoes007", "name": "Black Patent Shoes", "category": "Footwear", "size": "42", "status": "Ready", "location": "Shoe Rack 2", "condition": "Excellent", "price": 115, "notes": "For suit011, suit015"},
+    {"id": "shoes008", "name": "Green Leather Shoes", "category": "Footwear", "size": "41", "status": "Ready", "location": "Shoe Rack 2", "condition": "Good", "price": 95, "notes": "For suit012, suit013"},
+    {"id": "shoes009", "name": "Silver Heels", "category": "Footwear", "size": "39", "status": "Ready", "location": "Shoe Rack 3", "condition": "Excellent", "price": 110, "notes": "For dress012, dress014"},
+    {"id": "shoes010", "name": "Cream Dance Shoes", "category": "Footwear", "size": "38", "status": "Ready", "location": "Shoe Rack 3", "condition": "Good", "price": 105, "notes": "For dress011, dress013"},
+    
+    {"id": "spec001", "name": "Transformation Costume", "category": "Special Effects", "size": "M", "status": "Ready", "location": "Specialty Cabinet", "condition": "Excellent", "price": 650, "notes": "For Marcus Reynolds - Act 2 finale transformation"},
+    {"id": "spec002", "name": "Quick Release Gown", "category": "Special Effects", "size": "S", "status": "Ready", "location": "Specialty Cabinet", "condition": "Excellent", "price": 550, "notes": "For Julia Chen - Act 3 transformation"},
+    {"id": "spec003", "name": "Light-Up Jewelry Set", "category": "Special Effects", "size": "One Size", "status": "Ready", "location": "Specialty Cabinet", "condition": "Excellent", "price": 320, "notes": "For final scene"},
+    {"id": "spec004", "name": "Levitation Harness", "category": "Special Effects", "size": "Adjustable", "status": "Ready", "location": "Specialty Cabinet", "condition": "Excellent", "price": 1200, "notes": "For Act 3 ritual scene"},
+    {"id": "spec005", "name": "Water Effect Fabric", "category": "Special Effects", "size": "One Size", "status": "Ready", "location": "Specialty Cabinet", "condition": "Good", "price": 390, "notes": "For Act 2 storm scene"},
+    
+    {"id": "misc001", "name": "Prop Book Set", "category": "Props", "size": "One Size", "status": "Ready", "location": "Prop Shelf 2", "condition": "Good", "price": 120, "notes": "For library scenes"},
+    {"id": "misc002", "name": "Silver Dining Set", "category": "Props", "size": "One Size", "status": "Ready", "location": "Prop Shelf 2", "condition": "Excellent", "price": 180, "notes": "For dinner scenes"},
+    {"id": "misc003", "name": "Antique Tea Set", "category": "Props", "size": "One Size", "status": "Ready", "location": "Prop Shelf 2", "condition": "Good", "price": 150, "notes": "For garden scenes"},
+    {"id": "misc004", "name": "Victorian Briefcase", "category": "Props", "size": "One Size", "status": "Ready", "location": "Prop Shelf 3", "condition": "Good", "price": 95, "notes": "For business scenes"},
+    {"id": "misc005", "name": "Crystal Decanter Set", "category": "Props", "size": "One Size", "status": "Ready", "location": "Prop Shelf 3", "condition": "Excellent", "price": 220, "notes": "For study scenes"},
+    
+    {"id": "makeup001", "name": "Aging Makeup Kit", "category": "Makeup", "size": "One Size", "status": "Ready", "location": "Makeup Station 1", "condition": "Good", "price": 140, "notes": "For transformation scenes"},
+    {"id": "makeup002", "name": "Special FX Kit", "category": "Makeup", "size": "One Size", "status": "Ready", "location": "Makeup Station 1", "condition": "Excellent", "price": 210, "notes": "For supernatural elements"},
+    {"id": "makeup003", "name": "Period Makeup Set", "category": "Makeup", "size": "One Size", "status": "Ready", "location": "Makeup Station 2", "condition": "Good", "price": 180, "notes": "For all cast"},
+    {"id": "makeup004", "name": "Prosthetic Kit", "category": "Makeup", "size": "One Size", "status": "Ready", "location": "Makeup Station 2", "condition": "Excellent", "price": 250, "notes": "For character transformations"},
+    {"id": "makeup005", "name": "Body Painting Kit", "category": "Makeup", "size": "One Size", "status": "Ready", "location": "Makeup Station 3", "condition": "Good", "price": 160, "notes": "For ritual scenes"}
+  ],
+  "schedules": [
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "dress001",
+      "time": "2025-04-10T18:15:00",
+      "duration_minutes": 30,
+      "notes": "Full costume change with accessories acc002, acc003, shoes002, wig001"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Thomas Edwards",
+      "item": "suit001",
+      "time": "2025-04-10T18:15:00",
+      "duration_minutes": 25,
+      "notes": "Full costume change with accessories acc001, acc006, shoes001"
+    },
+    {
+      "actor": "Sophia Lee",
+      "dresser": "Kimberly Jackson",
+      "item": "dress002",
+      "time": "2025-04-10T18:20:00",
+      "duration_minutes": 20,
+      "notes": "Costume change with accessories acc003, acc009, shoes004, wig002"
+    },
+    {
+      "actor": "Daniel Harrison",
+      "dresser": "Thomas Edwards",
+      "item": "suit002",
+      "time": "2025-04-10T18:45:00",
+      "duration_minutes": 20,
+      "notes": "Quick change with accessories acc001, acc004, shoes001, wig003"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "dress003",
+      "time": "2025-04-10T19:00:00",
+      "duration_minutes": 25,
+      "notes": "Quick change with accessories acc002, acc007, shoes002"
+    },
+    {
+      "actor": "Olivia Wilson",
+      "dresser": "Kimberly Jackson",
+      "item": "dress004",
+      "time": "2025-04-10T19:10:00",
+      "duration_minutes": 20,
+      "notes": "New character introduction with accessories acc003, shoes004"
+    },
+    {
+      "actor": "James Rodriguez",
+      "dresser": "Thomas Edwards",
+      "item": "suit003",
+      "time": "2025-04-10T19:15:00",
+      "duration_minutes": 20,
+      "notes": "Change with accessories acc004, acc010, shoes003"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "suit004",
+      "time": "2025-04-10T19:25:00",
+      "duration_minutes": 25,
+      "notes": "Military uniform change with accessories acc008, acc015, shoes005"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Kimberly Jackson",
+      "item": "dress004",
+      "time": "2025-04-10T19:55:00",
+      "duration_minutes": 20,
+      "notes": "Act 1 to Act 2 change with accessories acc003, shoes004"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Thomas Edwards",
+      "item": "suit005",
+      "time": "2025-04-10T19:55:00",
+      "duration_minutes": 25,
+      "notes": "Act 1 to Act 2 change with accessories acc004, acc019, shoes001"
+    },
+    {
+      "actor": "Emma Parker",
+      "dresser": "Kimberly Jackson",
+      "item": "dress005",
+      "time": "2025-04-10T20:00:00",
+      "duration_minutes": 20,
+      "notes": "With accessories acc003, acc009, shoes004, wig004"
+    },
+    {
+      "actor": "Michael Thompson",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "suit006",
+      "time": "2025-04-10T20:10:00",
+      "duration_minutes": 20,
+      "notes": "With accessories acc004, acc012, shoes001"
+    },
+    {
+      "actor": "Isabella Sanchez",
+      "dresser": "Kimberly Jackson",
+      "item": "dress006",
+      "time": "2025-04-10T20:15:00",
+      "duration_minutes": 20,
+      "notes": "With accessories acc013, acc020, shoes002, wig005"
+    },
+    {
+      "actor": "Robert Jackson",
+      "dresser": "Thomas Edwards",
+      "item": "suit007",
+      "time": "2025-04-10T20:20:00",
+      "duration_minutes": 20,
+      "notes": "With accessories acc004, acc012, shoes001"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "dress007",
+      "time": "2025-04-10T20:30:00",
+      "duration_minutes": 25,
+      "notes": "Evening gown with accessories acc011, acc013, shoes002"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Thomas Edwards",
+      "item": "suit008",
+      "time": "2025-04-10T20:35:00",
+      "duration_minutes": 20,
+      "notes": "Hunting scene outfit with accessories acc004, acc014, shoes003"
+    },
+    {
+      "actor": "Sophia Lee",
+      "dresser": "Kimberly Jackson",
+      "item": "dress008",
+      "time": "2025-04-10T20:45:00",
+      "duration_minutes": 20,
+      "notes": "Travel outfit with accessories acc003, shoes004"
+    },
+    {
+      "actor": "Daniel Harrison",
+      "dresser": "Thomas Edwards",
+      "item": "suit009",
+      "time": "2025-04-10T20:50:00",
+      "duration_minutes": 20,
+      "notes": "Military uniform with accessories acc008, acc015, shoes005"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "spec001",
+      "time": "2025-04-10T21:00:00",
+      "duration_minutes": 35,
+      "notes": "Special effects transformation costume with makeup001, makeup002 - REQUIRES ALL THREE DRESSERS"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Kimberly Jackson",
+      "item": "dress009",
+      "time": "2025-04-10T21:40:00",
+      "duration_minutes": 25,
+      "notes": "Act 3 opening with accessories acc016, acc017, shoes004"
+    },
+    {
+      "actor": "Olivia Wilson",
+      "dresser": "Thomas Edwards",
+      "item": "dress009",
+      "time": "2025-04-10T21:45:00",
+      "duration_minutes": 20,
+      "notes": "Mourning scene with accessories acc016, shoes004"
+    },
+    {
+      "actor": "James Rodriguez",
+      "dresser": "Kimberly Jackson",
+      "item": "suit010",
+      "time": "2025-04-10T21:50:00",
+      "duration_minutes": 20,
+      "notes": "Funeral scene with accessories acc018, acc019, shoes001"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "suit011",
+      "time": "2025-04-10T22:00:00",
+      "duration_minutes": 25,
+      "notes": "Wedding scene with accessories acc024, shoes007"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Thomas Edwards",
+      "item": "dress010",
+      "time": "2025-04-10T22:05:00",
+      "duration_minutes": 30,
+      "notes": "Wedding gown with accessories acc021, shoes006"
+    },
+    {
+      "actor": "Emma Parker",
+      "dresser": "Kimberly Jackson",
+      "item": "dress011",
+      "time": "2025-04-10T22:15:00",
+      "duration_minutes": 20,
+      "notes": "Garden scene with accessories acc022, shoes010"
+    },
+    {
+      "actor": "Michael Thompson",
+      "dresser": "Thomas Edwards",
+      "item": "suit012",
+      "time": "2025-04-10T22:20:00",
+      "duration_minutes": 20,
+      "notes": "Garden scene with accessories acc004, shoes008"
+    },
+    {
+      "actor": "Isabella Sanchez",
+      "dresser": "Kimberly Jackson",
+      "item": "dress012",
+      "time": "2025-04-10T22:30:00",
+      "duration_minutes": 20,
+      "notes": "Evening scene with accessories acc023, shoes009"
+    },
+    {
+      "actor": "Robert Jackson",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "suit013",
+      "time": "2025-04-10T22:35:00",
+      "duration_minutes": 20,
+      "notes": "Celebration scene with accessories acc025, shoes008"
+    },
+    {
+      "actor": "Sophia Lee",
+      "dresser": "Kimberly Jackson",
+      "item": "dress013",
+      "time": "2025-04-10T22:40:00",
+      "duration_minutes": 20,
+      "notes": "Travel scene with accessories acc003, shoes010"
+    },
+    {
+      "actor": "Daniel Harrison",
+      "dresser": "Thomas Edwards",
+      "item": "suit014",
+      "time": "2025-04-10T22:45:00",
+      "duration_minutes": 20,
+      "notes": "Dinner scene with accessories acc025, shoes007"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "spec002",
+      "time": "2025-04-10T22:50:00",
+      "duration_minutes": 30,
+      "notes": "Act 3 transformation with special quick-release mechanism - REQUIRES ALL THREE DRESSERS"
+    },
+    {
+      "actor": "Julia Chen (Lead)",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "dress014",
+      "time": "2025-04-10T23:25:00",
+      "duration_minutes": 25,
+      "notes": "Final scene with accessories acc023, spec003, shoes009"
+    },
+    {
+      "actor": "Marcus Reynolds (Lead)",
+      "dresser": "Thomas Edwards",
+      "item": "suit015",
+      "time": "2025-04-10T23:25:00",
+      "duration_minutes": 25,
+      "notes": "Final scene with accessories acc024, spec003, shoes007"
+    },
+    {
+      "actor": "Olivia Wilson",
+      "dresser": "Kimberly Jackson",
+      "item": "dress012",
+      "time": "2025-04-10T23:30:00",
+      "duration_minutes": 20,
+      "notes": "Final scene with accessories acc023, shoes009"
+    },
+    {
+      "actor": "James Rodriguez",
+      "dresser": "Thomas Edwards",
+      "item": "suit014",
+      "time": "2025-04-10T23:35:00",
+      "duration_minutes": 20,
+      "notes": "Final scene with accessories acc025, shoes007"
+    },
+    {
+      "actor": "Emma Parker",
+      "dresser": "Kimberly Jackson",
+      "item": "dress014",
+      "time": "2025-04-10T23:40:00",
+      "duration_minutes": 15,
+      "notes": "Quick change for finale with accessories acc023, shoes009"
+    },
+    {
+      "actor": "Michael Thompson",
+      "dresser": "Natalie Chen (Head Dresser)",
+      "item": "spec004",
+      "time": "2025-04-10T23:45:00",
+      "duration_minutes": 25,
+      "notes": "Levitation harness installation for final scene - REQUIRES SPECIAL RIGGING ASSISTANCE"
+    }
+  ],
+  "tasks": [
+    {
+      "name": "Pre-set all Act 1 costumes",
+      "assigned_to": "All Dressers",
+      "deadline": "2025-04-10T17:30:00",
+      "status": "Not Started",
+      "priority": "High"
+    },
+    {
+      "name": "Prepare special effects costumes",
+      "assigned_to": "Natalie Chen (Head Dresser)",
+      "deadline": "2025-04-10T17:45:00",
+      "status": "Not Started",
+      "priority": "Critical"
+    },
+    {
+      "name": "Steam all period gowns",
+      "assigned_to": "Kimberly Jackson",
+      "deadline": "2025-04-10T16:30:00",
+      "status": "Not Started",
+      "priority": "Medium"
+    },
+    {
+      "name": "Polish all shoes",
+      "assigned_to": "Thomas Edwards",
+      "deadline": "2025-04-10T16:00:00",
+      "status": "Not Started",
+      "priority": "Medium"
+    },
+    {
+      "name": "Set up quick-change stations",
+      "assigned_to": "All Dressers",
+      "deadline": "2025-04-10T17:15:00",
+      "status": "Not Started",
+      "priority": "High"
+    },
+    {
+      "name": "Test levitation harness",
+      "assigned_to": "Natalie Chen (Head Dresser)",
+      "deadline": "2025-04-10T17:00:00",
+      "status": "Not Started",
+      "priority": "Critical"
+    },
+    {
+      "name": "Verify all accessories are prepped",
+      "assigned_to": "Kimberly Jackson",
+      "deadline": "2025-04-10T17:30:00",
+      "status": "Not Started",
+      "priority": "High"
+    },
+    {
+      "name": "Final costume check with designers",
+      "assigned_to": "Natalie Chen (Head Dresser)",
+      "deadline": "2025-04-10T17:45:00",
+      "status": "Not Started",
+      "priority": "High"
+    },
+    {
+      "name": "Set up emergency repair station",
+      "assigned_to": "Thomas Edwards",
+      "deadline": "2025-04-10T17:15:00",
+      "status": "Not Started",
+      "priority": "Medium"
+    },
+    {
+      "name": "Stock quick-change kits",
+      "assigned_to": "All Dressers",
+      "deadline": "2025-04-10T17:30:00",
+      "status": "Not Started",
+      "priority": "High"
+    },
+    {
+      "name": "Preset Act 3 special effects",
+      "assigned_to": "Natalie Chen (Head Dresser)",
+      "deadline": "2025-04-10T20:00:00",
+      "status": "Not Started",
+      "priority": "Critical"
+    },
+    {
+      "name": "Check transformation costume mechanisms",
+      "assigned_to": "Natalie Chen (Head Dresser)",
+      "deadline": "2025-04-10T17:15:00",
+      "status": "Not Started",
+      "priority": "Critical"
+    }
+  ],
+  "dresser_rotation": [
+    {
+      "time_block": "18:15 - 19:30",
+      "primary_focus": {
+        "Natalie Chen (Head Dresser)": "Lead actors (Julia, Marcus)",
+        "Thomas Edwards": "Male cast members",
+        "Kimberly Jackson": "Female supporting cast"
+      }
+    },
+    {
+      "time_block": "19:30 - 21:00",
+      "primary_focus": {
+        "Natalie Chen (Head Dresser)": "Special effects costumes",
+        "Thomas Edwards": "Lead male (Marcus)",
+        "Kimberly Jackson": "Lead female (Julia)"
+      }
+    },
+    {
+      "time_block": "21:00 - 21:40",
+      "primary_focus": {
+        "Natalie Chen (Head Dresser)": "Transformation sequence (All hands)",
+        "Thomas Edwards": "Transformation sequence (All hands)",
+        "Kimberly Jackson": "Transformation sequence (All hands)"
+      }
+    },
+    {
+      "time_block": "21:40 - 23:00",
+      "primary_focus": {
+        "Natalie Chen (Head Dresser)": "Lead actors (Julia, Marcus)",
+        "Thomas Edwards": "Male cast members",
+        "Kimberly Jackson": "Female supporting cast"
+      }
+    },
+    {
+      "time_block": "23:00 - End",
+      "primary_focus": {
+        "Natalie Chen (Head Dresser)": "Special effects and finale",
+        "Thomas Edwards": "Lead male and quick changes",
+        "Kimberly Jackson": "Female quick changes"
+      }
+    }
+  ],
+  "quick_change_locations": [
+    {
+      "location": "Stage Left Quick Change Booth",
+      "primary_dresser": "Natalie Chen (Head Dresser)",
+      "actors": ["Julia Chen (Lead)", "Marcus Reynolds (Lead)"],
+      "notes": "Priority station for lead actors with complex changes"
+    },
+    {
+      "location": "Stage Right Quick Change Booth",
+      "primary_dresser": "Thomas Edwards",
+      "actors": ["Daniel Harrison", "James Rodriguez", "Michael Thompson", "Robert Jackson"],
+      "notes": "Male cast quick changes"
+    },
+    {
+      "location": "Backstage Green Room",
+      "primary_dresser": "Kimberly Jackson",
+      "actors": ["Sophia Lee", "Olivia Wilson", "Emma Parker", "Isabella Sanchez"],
+      "notes": "Female supporting cast changes"
+    },
+    {
+      "location": "Special Effects Booth",
+      "primary_dresser": "All Dressers",
+      "actors": ["Julia Chen (Lead)", "Marcus Reynolds (Lead)", "Michael Thompson"],
+      "notes": "Dedicated space for complex special effects costume changes requiring multiple dressers"
+    }
+  ]
+}
