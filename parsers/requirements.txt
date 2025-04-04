@@ -1,0 +1,16 @@
+# Core Data Processing
+pandas>=1.3.0
+numpy>=1.21.0
+
+# File Parsing
+tabula-py>=2.3.0
+PyMuPDF>=1.19.0
+openpyxl>=3.0.9
+odfpy>=0.5.30
+
+# Utility
+uuid>=1.30
+
+# Optional: Development and Testing
+pytest>=6.2.0
+pylint>=2.8.0
